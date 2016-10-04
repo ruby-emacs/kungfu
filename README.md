@@ -25,14 +25,24 @@
 | get-api-to-doc |     |  Http请求API将其JSON结果打印处理,url为参数  |
 | get-mark-content |   |  获取标记部分的内容,传递给其他函数使用  |
 | get-mark-content-for-bash |   |  获取标记部分的内容,替换为Bash接受的字符串  |
+| source |   |  就像source ~/.zshrc 一样让init.el生效 |
+| http-send-apiary |    |  (http-send-apiary "users" "post")post请求users的API  |
+| http-one-params |    |  获取当前行的内容作为参数请求API: 参数为(url http-method)  |
+| http-send-apiary-params |   | 获取多参数作为API请求, 参数为(url http-method)  |
 | wy-go-to-char | C-c t  |  单字符的向下跳转,用于快速Mark标记跳转到某字符处 |
-| rb-source-find | C-c g  |       |
-| rb-source-find-next | C-c n  |       |
-| rb-source-find-next-super | C-c b  |       |
-| rb-eval | C-c p  |       |
-| rb-eval-var | C-c y  |       |
-| rb-eval9018  | C-c o  |       |
-| rb-eval-expression-at | C-c j  |       |
-| rb-eval-expression-at9018  | C-c k  |       |
-| get-rb-obj-body | C-c y  |       |
-| rb-eval-expression-at-lambda | C-c C-j  |       |
+| rb-source |   |  Emacs查看Ruby的函数定义位置不跳转: Mark "obj.method"  |
+| rb-source-find | C-c g  |  Emacs查看Ruby的函数定义跳转: Mark "obj.method"     |
+| rb-source-find-next | C-c n  |  第二次跳转用第一次的对象查找它的方法, 会try两次包括实例方法和类方法: Mark "instace_method"      |
+| rb-source-find-next-super | C-c b  |  No need Mark any, use (buffer-file-name) as Class name, rb-method-root as method name     |
+| rb-eval | C-c p  |   获取Mark缓冲内容发送给项目的repl执行    |
+| rb-eval-var | C-c y  |    只是看变量的值   |
+| rb-eval9018  | C-c o  |   执行表达式在生产环境的sandbox的repl    |
+| rb-eval-expression-at | C-c j  | 发送当前表达式的多行结构到repl执行    |
+| rb-eval-expression-at9018  | C-c k  |   发送当前表达式的多行结构到生产环境sandbox的repl执行     |
+| open-spec/open-app |  | 打开对应的测试或源文件 |
+|  method-find-call |  |  查找项目中所有的call调用,灵感来自brakeman |
+| is-rb-params |  |  判断当前标记部分或当前的表达式是否为params的结构体,采用Racket编写判断表达式类型,灵感来自brakeman和Lisp列表的处理  |
+| get-point-keyword |  | 获取当前的光标的单词  |
+| get-rb-obj-body | C-c y  |  获取当前光标位置向下获取完整的独立结构定义的内容: source_location     |
+| get-rb-obj-body-line-number |  | 获取注释下面一行的表达式体  |
+| rb-eval-expression-at-lambda | C-c C-j  |  用注释内容测试当前纯函数:  C-c C-j整体  + C-c p局部Mark + C-c t wy-go-to-char   |
