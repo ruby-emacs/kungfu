@@ -16,9 +16,16 @@
 
 | 函数名        | 键名       | 使用功能说明  |
 | ------------- |:-------------:| -----:|
-| rb-understr | C-c i  |       |
-| ruby-parser-mark | C-c l  |       |
-| wy-go-to-char | C-c t  |       |
+| downcase-str |    |将标记部分正则替换replace-regexp为全小写,并用中隔线相连,解决Markdown的URL目录生成问题  |
+| rb-underscore |    | 将标记部分正则替换为Rails的underscore写法      |
+| rb-understr | C-c i  | 将标记部分替换为Rails的underscore写法      |
+| rb-camelize |     | 将标记部分正则替换为Rails的camelize大写  |
+| ruby-parser |     | 传入Ruby字符串,将其转为S表达式 |
+| ruby-parser-mark | C-c l  |  将标记部分的Ruby表达式转为S表达式,打印出来|
+| get-api-to-doc |     |  Http请求API将其JSON结果打印处理,url为参数  |
+| get-mark-content |   |  获取标记部分的内容,传递给其他函数使用  |
+| get-mark-content-for-bash |   |  获取标记部分的内容,替换为Bash接受的字符串  |
+| wy-go-to-char | C-c t  |  单字符的向下跳转,用于快速Mark标记跳转到某字符处 |
 | rb-source-find | C-c g  |       |
 | rb-source-find-next | C-c n  |       |
 | rb-source-find-next-super | C-c b  |       |
