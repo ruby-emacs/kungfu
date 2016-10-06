@@ -46,3 +46,4 @@
 | get-rb-obj-body | C-c y  |  获取当前光标位置向下获取完整的独立结构定义的内容: source_location     |
 | get-rb-obj-body-line-number |  | 获取注释下面一行的表达式体  |
 | rb-eval-expression-at-lambda | C-c C-j  |  用注释内容测试当前纯函数:  C-c C-j整体  + C-c p局部Mark + C-c t wy-go-to-char   |
+| jw-eval-or-clear-buffer | C-c v | 执行整个文件的内容,就像cider的`C-c C-k`  |
