@@ -12,6 +12,14 @@
 * 实现代码的精确跳转, 通过项目环境的binding查找定义位置跳转, 而不是用ctags等: 解决代码的多层往下跳转的问题, 以及
 * 利用Ruby转为S表达式, 实现代码的多个条件结构化递归搜索: 多关键词组合搜索, 语法结构特征关键词(如Lambda), 变量名或方法名关键词, 调用或者是定义的结构特征关键词(find_call) 等定位多条件搜索结果,精确到某个方法定义或者lambda定义, 或者的变量定义
 
+### 安装使用:
+
+```bash
+git clone git@github.com:ruby-emacs/kungfu.git /path/kungfu
+# add this code to your init.el or .emacs
+(load-file "/path/kungfu/kungfu.el")
+```
+
 ### API文档:
 
 | 函数名        | 键名       | 使用功能说明  |
@@ -47,4 +55,5 @@
 | get-rb-obj-body-line-number |  | 获取注释下面一行的表达式体  |
 | rb-eval-expression-at-lambda | C-c C-j  |  用注释内容测试当前纯函数:  C-c C-j整体  + C-c p局部Mark + C-c t wy-go-to-char   |
 | jw-eval-or-clear-buffer | C-c v | 执行整个文件的内容,就像cider的`C-c C-k`  |
-| restart-drb-server | |  重启drb-server,并把客户端的执行环境,合并到drb server环境,即binding的合并 |
+| restart-drb-server |   |  重启drb-server,并把客户端的执行环境,合并到drb server环境,即binding的合并 |
+| drb-server-check |  |  检查drb server 9000 是否启动,并把异常给Emacs |
