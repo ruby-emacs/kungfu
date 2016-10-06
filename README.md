@@ -47,3 +47,4 @@
 | get-rb-obj-body-line-number |  | 获取注释下面一行的表达式体  |
 | rb-eval-expression-at-lambda | C-c C-j  |  用注释内容测试当前纯函数:  C-c C-j整体  + C-c p局部Mark + C-c t wy-go-to-char   |
 | jw-eval-or-clear-buffer | C-c v | 执行整个文件的内容,就像cider的`C-c C-k`  |
+| restart-drb-server | |  重启drb-server,并把客户端的执行环境,合并到drb server环境,即binding的合并 |
