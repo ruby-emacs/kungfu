@@ -3,7 +3,7 @@
 (require 'kungfu)
 
 ;;; for test ;;
-(ert-deftest my-test ()
+(ert-deftest my-fixture ()
   (my-fixture
    (lambda ()
      [test code])))
