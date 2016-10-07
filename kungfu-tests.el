@@ -18,3 +18,8 @@
   (should (equal (pp-to-string '((quote a) (quote b))) "('a 'b)\n"))
   (should (equal (pp-to-string '('a 'b)) "('a 'b)\n")))
 
+;;;;;;;;
+
+(ert-deftest addition-test ()
+  (should (= (+ 1 2) 3)))
+
