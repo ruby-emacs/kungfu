@@ -23,3 +23,12 @@
 (ert-deftest addition-test ()
   (should (= (+ 1 2) 3)))
 
+;;;; for kungfu.el test ;;;
+
+;; mock the function
+(defun get-mark-content (arg)
+  "Test Abc")
+
+(ert-deftest downcase-str ()
+  (should (equal (downcase-str) "test abc") )) 
+

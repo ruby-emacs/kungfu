@@ -8,8 +8,13 @@
     [tear down]))
 ;;;;
 
+;;  (get-mark-content (current-buffer))
+(defun get-mark-content (buffername)
+  (with-current-buffer buffername  (buffer-substring-no-properties (region-beginning) (region-end)) )
+  )
+
 (defun downcase-str ()
-  (let ((str (buffer-substring-no-properties (region-beginning) (region-end))))
+  (let ((str (get-mark-content (current-buffer)) ))
     (downcase str)))
 
 ;; Eval: (rb-underscore "AdddTaaaGaaa") => "addd_taaa_gaaa"
@@ -68,9 +73,6 @@
 (server-start)
 
 
-(defun get-mark-content (buffername)
-  (with-current-buffer buffername  (buffer-substring-no-properties (region-beginning) (region-end)) )
-  )
 
 (defun get-mark-content-for-bash (buffername)
   (replace-regexp-in-string "`" "'" (get-mark-content buffername) )
