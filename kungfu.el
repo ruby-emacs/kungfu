@@ -23,6 +23,7 @@
     (shell-command-to-string cmd-str)
     )
   )
+
 (defun rb-understr ()
   (interactive)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/rb-underscore.drb " (get-point-keyword) )))
