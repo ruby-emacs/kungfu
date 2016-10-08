@@ -38,3 +38,25 @@
 (ert-deftest rb-underscore-words ()
   (should (equal (rb-underscore-words) "bdasdas_ydasds") ))
 
+(ert-deftest rb-camelize ()
+  (should (equal (rb-camelize "sdadsa_jkkjtrlkj_fds") "SdadsaJkkjtrlkjFds")) )
+
+(ert-deftest ruby-parser ()
+  (should
+   (equal
+    (ruby-parser "def index a; a + 1; end")
+    "s(:defn, :index, s(:args, :a), s(:call, s(:lvar, :a), :+, s(:lit, 1)))") ))
+
+;;(defun get-mark-content (arg) "->a{a}")
+;;(pop (split-string "dasdsa \n dasdsa \n " "\n")) , erro
+;;(car (last (butlast '(1 2 5 8 1 3)))) ;;=> 1
+;; ==== 在Emacs中运行是正确的,在命令运行是错误的
+;; (ert-deftest ruby-parser-mark ()
+;;   (should
+;;    (equal
+;;     (ruby-parser-mark)
+;;     (get-messages-last-line))
+;;    ))
+;; 
+
+

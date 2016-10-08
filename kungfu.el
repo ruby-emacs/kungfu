@@ -7,6 +7,15 @@
              (funcall body))
     [tear down]))
 ;;;;
+(defun get-messages-content ()
+  (with-current-buffer "*Messages*" (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun get-messages-last-line ()
+  (car
+   (last
+    (butlast
+     (split-string (get-messages-content) "\n") ))) )
+
 ;;  (get-mark-content (current-buffer))
 (defun get-mark-content (buffername)
   (with-current-buffer buffername  (buffer-substring-no-properties (region-beginning) (region-end)) ))
@@ -34,23 +43,16 @@
 
 (defun rb-camelize (str)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/rb-camelize.drb " str)))
-    (shell-command-to-string cmd-str)
-    )
-  )
+    (shell-command-to-string cmd-str) )) 
 
 (defun ruby-parser (str)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/ruby_parser.drb " "\"" str "\"")))
-    (shell-command-to-string cmd-str)
-    )
-  )
+    (shell-command-to-string cmd-str) ))
 
 (defun ruby-parser-mark ()
   (interactive)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/ruby_parser.drb " "\"" (get-mark-content (current-buffer))  "\"")))
-    (message (shell-command-to-string cmd-str))
-    )
-  )
-
+    (message (shell-command-to-string cmd-str)) ))
 (define-key global-map (kbd "C-c l") 'ruby-parser-mark)
 
 ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
