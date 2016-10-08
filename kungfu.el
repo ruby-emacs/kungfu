@@ -22,8 +22,8 @@
   (interactive)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/rb-underscore.drb " (get-point-keyword) )))
     (progn
-     (kill-region (region-beginning) (region-end))
-     (insert (shell-command-to-string cmd-str)))
+      (kill-region (region-beginning) (region-end))
+      (insert (shell-command-to-string cmd-str)))
     )
   )
 
@@ -60,7 +60,7 @@
 
 (add-to-list 'load-path (concat home-path "/clojure_emacs/apib-mode") )
 (autoload 'apib-mode "apib-mode"
-        "Major mode for editing API Blueprint files" t)
+  "Major mode for editing API Blueprint files" t)
 (add-to-list 'auto-mode-alist '("\\.apib\\'" . apib-mode))
 
 ;;;;;;;;;;
@@ -151,7 +151,7 @@ occurence of CHAR."
 
 (define-key global-map (kbd "C-c g") 'rb-source-find)
 
-; Mark "instace_method" => "C-c n"
+					; Mark "instace_method" => "C-c n"
 (defun rb-source-find-next ()
   (interactive) ;;;; only diff in obj-method
   (let ((obj-method   (concat rb-obj-root "." (get-mark-content (current-buffer)) )  ))
@@ -159,27 +159,27 @@ occurence of CHAR."
 			  (read (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/rb_source.drb " obj-method)) )
 			  )) )
 ;;;;;;;;;;;;;
-     (if (first file-and-line) 
+      (if (first file-and-line) 
 
-      (let ((rb-file (first file-and-line))
-	    (rb-line (first (last file-and-line))) )
-	(let ((rb-buffer (first (last (split-string rb-file "/"))))
-              (rb-obj (first (split-string obj-method "\\.")) )
-              )
-	  (progn
-	    (find-file rb-file)
-	    (goto-line rb-line rb-buffer)
-            (setq rb-obj-root rb-obj)
-	    (message (concat "cool, open the file: " rb-file " , " (number-to-string rb-line) " , " rb-obj))
+	  (let ((rb-file (first file-and-line))
+		(rb-line (first (last file-and-line))) )
+	    (let ((rb-buffer (first (last (split-string rb-file "/"))))
+		  (rb-obj (first (split-string obj-method "\\.")) )
+		  )
+	      (progn
+		(find-file rb-file)
+		(goto-line rb-line rb-buffer)
+		(setq rb-obj-root rb-obj)
+		(message (concat "cool, open the file: " rb-file " , " (number-to-string rb-line) " , " rb-obj))
+		)
+	      )
 	    )
+
+	(progn
+	  (setq rb-method-root (first (last file-and-line)) )
+	  (message (concat "please go to rb-method-root : " rb-method-root " , Run : C-c b"))
 	  )
 	)
-
-         (progn
-           (setq rb-method-root (first (last file-and-line)) )
-           (message (concat "please go to rb-method-root : " rb-method-root " , Run : C-c b"))
-           )
-         )
 ;;;;;;;;;;;;;;;;;;;;;;;;
       )
     )
@@ -192,12 +192,12 @@ occurence of CHAR."
 (defun rb-source-find-next-super ()
   (interactive) ;;;; only diff in obj-method
   (let ((obj-method   (concat
-       (rb-camelize (first (split-string (first (last (split-string (buffer-file-name) "lib/"))) "\\.")) )
-       "."
-       rb-method-root
-         )  ))
+		       (rb-camelize (first (split-string (first (last (split-string (buffer-file-name) "lib/"))) "\\.")) )
+		       "."
+		       rb-method-root
+		       )  ))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;(message obj-method) ;; Pry::Command.run
+    ;;(message obj-method) ;; Pry::Command.run
     (let ((file-and-line (second
 			  (read (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/rb_source.drb " obj-method)) )
 			  )) )
@@ -207,8 +207,8 @@ occurence of CHAR."
 	(let ((rb-buffer (first (last (split-string rb-file "/"))))
               (rb-obj (first (split-string obj-method "\\.")) )
               )
-;;         (message (concat rb-file "===" "245" "===" rb-buffer "=======" rb-obj) )
-;; /usr/local/rvm/gems/ruby-2.2.3/gems/pry-0.10.1/lib/pry/command.rb===245===command.rb=======Pry::Command
+	  ;;         (message (concat rb-file "===" "245" "===" rb-buffer "=======" rb-obj) )
+	  ;; /usr/local/rvm/gems/ruby-2.2.3/gems/pry-0.10.1/lib/pry/command.rb===245===command.rb=======Pry::Command
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	  (progn
@@ -267,7 +267,7 @@ occurence of CHAR."
 (defun rb-eval-expression-at ()
   (interactive)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/binding_eval.drb " "\"" (get-rb-obj-body)  "\"")))
-;; cmd-str ==> "drb /home/clojure/clojure_emacs/drb-help/binding_eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
+    ;; cmd-str ==> "drb /home/clojure/clojure_emacs/drb-help/binding_eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
     (message (shell-command-to-string cmd-str))
     )
   )
@@ -303,16 +303,16 @@ occurence of CHAR."
 ;;; The brakeman help parse the rails project
 (defun method-find-call ()
   (interactive)
-    (let ((cmd-str (concat "drb9 " home-path "/clojure_emacs/drb-help/method-find-call.drb9 " "\"" (get-mark-content (current-buffer))  "\""))) 
-        (message (shell-command-to-string cmd-str))
-      )
+  (let ((cmd-str (concat "drb9 " home-path "/clojure_emacs/drb-help/method-find-call.drb9 " "\"" (get-mark-content (current-buffer))  "\""))) 
+    (message (shell-command-to-string cmd-str))
+    )
   )
 
 (defun is-rb-params ()
   (interactive)
-    (let ((cmd-str (concat home-path "/clojure_emacs/rkt-help/params_type " "\"" (ruby-parser-mark)  "\"")))
-        (message (shell-command-to-string cmd-str))
-      )
+  (let ((cmd-str (concat home-path "/clojure_emacs/rkt-help/params_type " "\"" (ruby-parser-mark)  "\"")))
+    (message (shell-command-to-string cmd-str))
+    )
   )
 
 ;;;;;
@@ -320,17 +320,17 @@ occurence of CHAR."
 (defun get-point-keyword ()
   (interactive)
   (progn  
-  (set-mark-command nil)
-  (forward-sexp 1) 
-  (get-mark-content (current-buffer)) )
+    (set-mark-command nil)
+    (forward-sexp 1) 
+    (get-mark-content (current-buffer)) )
   )
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; %Q{aaa dsadas dsads}.gsub(/a/, %q{A}) 已支持
 (defun get-rb-obj-body ()
   (interactive)
-    (let ((cmd-str (concat home-path "/clojure_emacs/rb-help/expression_at.rb "  (buffer-file-name)  "  " (number-to-string (line-number-at-pos))  )))
-        (shell-command-to-string cmd-str)
-      )
+  (let ((cmd-str (concat home-path "/clojure_emacs/rb-help/expression_at.rb "  (buffer-file-name)  "  " (number-to-string (line-number-at-pos))  )))
+    (shell-command-to-string cmd-str)
+    )
   )
 ;;;;(define-key global-map (kbd "C-c y") 'get-rb-obj-body)
 
@@ -338,9 +338,9 @@ occurence of CHAR."
 (defun get-rb-obj-body-line-number (line-number)
   (interactive)
   (line-number-at-pos)
-    (let ((cmd-str (concat home-path "/clojure_emacs/rb-help/expression_at.rb "  (buffer-file-name)  "  " (number-to-string (+ line-number (line-number-at-pos))  )  )))
-        (message (shell-command-to-string cmd-str))
-      )
+  (let ((cmd-str (concat home-path "/clojure_emacs/rb-help/expression_at.rb "  (buffer-file-name)  "  " (number-to-string (+ line-number (line-number-at-pos))  )  )))
+    (message (shell-command-to-string cmd-str))
+    )
   )
 
 
@@ -353,13 +353,13 @@ occurence of CHAR."
   (interactive)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/binding_eval.drb " "\"" 
 ;;;;;;;;;
-"-> { " (get-rb-obj-body-line-number 1) " ; " 
+			 "-> { " (get-rb-obj-body-line-number 1) " ; " 
+			 
+			 (replace-regexp-in-string "^[[:space:]]+#" "" (get-rb-obj-body-line-number 0))
 
-(replace-regexp-in-string "^[[:space:]]+#" "" (get-rb-obj-body-line-number 0))
-
-  " }[] "
+			 " }[] "
 ;;;;;;;;
-      "\"")))
+			 "\"")))
     (message (shell-command-to-string cmd-str))
     )
   )
@@ -372,30 +372,30 @@ occurence of CHAR."
 (defun rails-scaffold-by-sch ()
   (interactive)
   (line-number-at-pos)
-    (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/expression_at_for_schema.drb "  (buffer-file-name)  "  " (number-to-string (line-number-at-pos))  )))
-        (progn 
-          (message (concat "Run: " (shell-command-to-string cmd-str)))
-          (shell-command-to-string (shell-command-to-string cmd-str))
-          (shell-command-to-string " rake db:migrate ")  )
-      )
+  (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/expression_at_for_schema.drb "  (buffer-file-name)  "  " (number-to-string (line-number-at-pos))  )))
+    (progn 
+      (message (concat "Run: " (shell-command-to-string cmd-str)))
+      (shell-command-to-string (shell-command-to-string cmd-str))
+      (shell-command-to-string " rake db:migrate ")  )
+    )
   )
 
 (defun rails-scaffold-str ()
   (line-number-at-pos)
-    (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/expression_at_for_schema.drb "  (buffer-file-name)  "  " (number-to-string (line-number-at-pos))  )))
-        (progn
-          (message (shell-command-to-string cmd-str)))
-      )
+  (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/expression_at_for_schema.drb "  (buffer-file-name)  "  " (number-to-string (line-number-at-pos))  )))
+    (progn
+      (message (shell-command-to-string cmd-str)))
+    )
   )
 
 ;;; 检查drb server 9000 是否启动 ;;;;;;;; drb传异常给Emacs
 (defun drb-server-check ()
-    (message "The drb server is start")
+  (message "The drb server is start")
   )
 
 ;; 打印到minibuffer然后再C-v复制出来吧
 (defun copy
-  (interactive)
+    (interactive)
   (get-mark-content (current-buffer))  
   )
 
