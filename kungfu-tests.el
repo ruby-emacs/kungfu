@@ -26,13 +26,15 @@
 ;;;; for kungfu.el test ;;;
 
 ;; mock the function
-(defun get-mark-content (arg)
-  "Test Abc")
-
+(defun get-mark-content (arg) "Test Abc")
 (ert-deftest downcase-str ()
-  (should (equal (downcase-str) "test abc") )
-  ) 
+  (should (equal (downcase-str) "test abc") )) 
 ;; must start drb server for test, add `gem 'drbcli' to Gemfile`
 (ert-deftest rb-underscore ()
-  (should (equal (rb-underscore "AdddTaaaGaaa") "addd_taaa_gaaa") )
-  )
+  (should (equal (rb-underscore "AdddTaaaGaaa") "addd_taaa_gaaa") ))
+
+(defun relace-region-str (str) str)
+(defun get-point-keyword () "BdasdasYdasds")
+(ert-deftest rb-underscore-words ()
+  (should (equal (rb-underscore-words) "bdasdas_ydasds") ))
+

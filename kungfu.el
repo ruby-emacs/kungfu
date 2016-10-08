@@ -7,11 +7,14 @@
              (funcall body))
     [tear down]))
 ;;;;
-
 ;;  (get-mark-content (current-buffer))
 (defun get-mark-content (buffername)
-  (with-current-buffer buffername  (buffer-substring-no-properties (region-beginning) (region-end)) )
-  )
+  (with-current-buffer buffername  (buffer-substring-no-properties (region-beginning) (region-end)) ))
+
+(defun relace-region-str (str)
+  (progn
+    (kill-region (region-beginning) (region-end))
+    (insert str)) ) 
 
 (defun downcase-str ()
   (let ((str (get-mark-content (current-buffer)) ))
@@ -20,20 +23,14 @@
 ;; Eval: (rb-underscore "AdddTaaaGaaa") => "addd_taaa_gaaa"
 (defun rb-underscore (str)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/rb-underscore.drb " str)))
-    (shell-command-to-string cmd-str)
-    )
-  )
+    (shell-command-to-string cmd-str) ))
 
-(defun rb-understr ()
+(defun rb-underscore-words ()
   (interactive)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/rb-underscore.drb " (get-point-keyword) )))
-    (progn
-      (kill-region (region-beginning) (region-end))
-      (insert (shell-command-to-string cmd-str)))
-    )
-  )
+    (relace-region-str (shell-command-to-string cmd-str)) ))
 
-(define-key global-map (kbd "C-c i") 'rb-understr)
+(define-key global-map (kbd "C-c i") 'rb-underscore-words)
 
 (defun rb-camelize (str)
   (let ((cmd-str (concat "drb " home-path "/clojure_emacs/drb-help/rb-camelize.drb " str)))
