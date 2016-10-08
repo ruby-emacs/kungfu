@@ -55,25 +55,19 @@
     (message (shell-command-to-string cmd-str)) ))
 (define-key global-map (kbd "C-c l") 'ruby-parser-mark)
 
-;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
-(defun get-api-to-doc (url)
-  (let ((url-cmd   (concat " drb " home-path "/clojure_emacs/drb-help/http.drb " url)))
-    (shell-command-to-string url-cmd)
-    )
-  )
-
-
-(add-to-list 'load-path (concat home-path "/clojure_emacs/apib-mode") )
-(autoload 'apib-mode "apib-mode"
-  "Major mode for editing API Blueprint files" t)
-(add-to-list 'auto-mode-alist '("\\.apib\\'" . apib-mode))
+;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
+;; (defun get-api-to-doc (url)
+;;   (let ((url-cmd   (concat " drb " home-path "/clojure_emacs/drb-help/http.drb " url)))
+;;     (shell-command-to-string url-cmd)
+;;     )
+;;   )
+;; (add-to-list 'load-path (concat home-path "/clojure_emacs/apib-mode") )
+;; (autoload 'apib-mode "apib-mode"
+;;   "Major mode for editing API Blueprint files" t)
+;; (add-to-list 'auto-mode-alist '("\\.apib\\'" . apib-mode))
+;;
 
 ;;;;;;;;;;
-(server-force-delete)
-(server-start)
-
-
-
 (defun get-mark-content-for-bash (buffername)
   (replace-regexp-in-string "`" "'" (get-mark-content buffername) )
   )
@@ -84,23 +78,23 @@
   (load-file (concat home-path "/clojure_emacs/init.el") )
   )
 
-;; Eval: (http-send-apiary "users" "post")
-(defun http-send-apiary (url http-method)
-  (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
-
-;; 只是单个参数,可以不用Mark,而获取当前行的内容
-(defun http-one-params (url http-method)
-  (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary_one.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
-
-(defun http-send-apiary-params (url http-method)
-  (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary_params.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
-
-;; (inf-ruby-switch-setup) + ` C-x C-q `
-(defun ininf ()
-  (inf-ruby-switch-setup)
-  (inf-ruby-maybe-switch-to-compilation)
-  )
-
+;; ;; Eval: (http-send-apiary "users" "post")
+;; (defun http-send-apiary (url http-method)
+;;   (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
+;; 
+;; ;; 只是单个参数,可以不用Mark,而获取当前行的内容
+;; (defun http-one-params (url http-method)
+;;   (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary_one.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
+;; 
+;; (defun http-send-apiary-params (url http-method)
+;;   (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary_params.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
+;; 
+;; ;; (inf-ruby-switch-setup) + ` C-x C-q `
+;; (defun ininf ()
+;;   (inf-ruby-switch-setup)
+;;   (inf-ruby-maybe-switch-to-compilation)
+;;   )
+;; 
 ;; http://docs.huihoo.com/homepage/shredderyin/emacs_elisp.html ==> (read-char)
 ;; `C-c a `=> Mark 向下一个的光标, 或者不要Mark的向下的一个字符
 ;; "aaaaaaaaaaaaaaaaaaaaa"
