@@ -1,12 +1,5 @@
 (defvar home-path (replace-regexp-in-string "/\\(\\w+\\)/\\(\\w+\\)/\\(.*\\)" "/\\1/\\2" (getenv "PWD")) )
 
-;;;; for test ;;; 
-(defun my-fixture (body)
-  (unwind-protect
-      (progn [set up]
-             (funcall body))
-    [tear down]))
-;;;;
 (defun get-messages-content ()
   (with-current-buffer "*Messages*" (buffer-substring-no-properties (point-min) (point-max))))
 

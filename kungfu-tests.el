@@ -2,11 +2,18 @@
 (load-file "./kungfu.el")
 (require 'kungfu)
 
-;;; for test ;;
+
+;;;; for mock test ;;; 
+(defun my-fixture (body)
+  (unwind-protect
+      (progn [set up]
+             (funcall body))
+    [tear down]))
 (ert-deftest my-fixture ()
   (my-fixture
    (lambda ()
      [test code])))
+
 ;;;;
 ;; (pp-to-string '(quote quote))          ; expected: "'quote"
 ;; (pp-to-string '((quote a) (quote b)))  ; expected: "('a 'b)\n"
@@ -26,7 +33,7 @@
 ;;;; for kungfu.el test ;;;
 
 ;; mock the function
-(defun get-mark-content (arg) "Test Abc")
+(defun get-mark-content (buffername) (unwind-protect "Test Abc"))
 (ert-deftest downcase-str ()
   (should (equal (downcase-str) "test abc") )) 
 ;; must start drb server for test, add `gem 'drbcli' to Gemfile`
