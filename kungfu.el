@@ -112,12 +112,9 @@ occurence of CHAR."
 (define-key global-map (kbd "C-c t") 'wy-go-to-char)
 
 ;;; Emacs查看Ruby的函数定义跳转: Mark "obj.method" => rb-source
-(defun rb-source ()
+(defun rb-source (obj-call-method)
   (interactive)
-  (let ((obj-method (get-mark-content (current-buffer))))
-    (message (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/rb_source.drb " obj-method)) )
-    )
-  )
+  (first (last (read (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/rb_source.drb " obj-call-method)) ))) )
 
 (defvar rb-obj-root nil)
 (defvar rb-method-root nil)

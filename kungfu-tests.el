@@ -59,4 +59,10 @@
 ;;    ))
 ;; 
 
+;;
 
+;; 在Emacs里验证是正确的, 在命令验证是错的
+;;(ert-deftest rb-source ()
+;;  (equal
+;;   (rb-source "binding.pry")
+;;   (list "/usr/local/rvm/gems/ruby-2.2.3/gems/pry-0.10.4/lib/pry/core_extensions.rb" 41) )  )
