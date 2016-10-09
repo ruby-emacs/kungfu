@@ -1,6 +1,8 @@
 # KungFu : 实现Ruby项目Repl的循环, 与Emacs的交互式开发, 灵感来自Cider(Clojure)
 
-*项目创建的起源: 解决Ruby项目Gem等开发,无法实时和Emacs交互的问题, 起初是为了用Rails的underscore功能直接修改文档, 利用Emacs的replace-regexp, 将文档中的驼峰式写法转为underscore写法*
+> 项目创建的起源: <br/> 
+> 解决Ruby项目Gem等开发,无法实时和Emacs交互的问题  <br/> 
+> 起初是为了用Rails的underscore功能直接修改文档, 利用Emacs的replace-regexp, 将文档中的驼峰式写法转为underscore写法
 
 ### 功能: 
 
