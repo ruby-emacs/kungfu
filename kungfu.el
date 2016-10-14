@@ -50,8 +50,6 @@
                          (get-point-keyword) )))
     (relace-region-str (shell-command-to-string cmd-str))))
 
-(define-key global-map (kbd "C-c i") 'rb-underscore-words)
-
 (defun rb-camelize (str)
   (let ((cmd-str (concat "drb " home-path
                          "/clojure_emacs/drb-help/rb-camelize.drb " str)))
@@ -69,7 +67,6 @@
                          "/clojure_emacs/drb-help/ruby_parser.drb "
                          "\"" (get-mark-content (current-buffer))  "\"")))
     (message (shell-command-to-string cmd-str)) ))
-(define-key global-map (kbd "C-c l") 'ruby-parser-mark)
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
 ;; (defun get-api-to-doc (url)
@@ -122,8 +119,6 @@ occurence of CHAR."
     (search-forward (string char) nil nil n))
   (setq unread-command-events (list last-input-event)))
 
-(define-key global-map (kbd "C-c t") 'wy-go-to-char)
-
 ;;; Emacs查看Ruby的函数定义跳转: Mark "obj.method" => rb-source
 (defun rb-source (obj-call-method)
   (interactive)
@@ -161,8 +156,6 @@ occurence of CHAR."
             )
           )))))
 
-(define-key global-map (kbd "C-c g") 'rb-source-find)
-
 ;; Mark "instace_method" => "C-c n"
 (defun rb-source-find-next ()
   (interactive) ;;;; only diff in obj-method
@@ -197,9 +190,6 @@ occurence of CHAR."
                    " , Run : C-c b"))
           )))))
 
-(define-key global-map (kbd "C-c n") 'rb-source-find-next)
-
-;;;;;;;;;;;;;;;;;;
 ;;; No need Mark any, use (buffer-file-name) as Class name, rb-method-root as method name => ` C-c b `
 (defun rb-source-find-next-super ()
   (interactive) ;;;; only diff in obj-method
@@ -233,9 +223,6 @@ occurence of CHAR."
                      " , " (number-to-string rb-line) " , " rb-obj)))
           )))))
 
-(define-key global-map (kbd "C-c b") 'rb-source-find-next-super)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Like `C-x C-e` eval the ruby expression, such as: `User.first.id` => 3
 (defun rb-eval ()
   (interactive)
@@ -244,9 +231,6 @@ occurence of CHAR."
                  "/clojure_emacs/drb-help/binding_eval.drb "
                  "\"" (get-mark-content (current-buffer))  "\"")))
     (message (shell-command-to-string cmd-str))))
-
-(define-key global-map (kbd "C-c p") 'rb-eval)
-
 
 (defun rb-eval-var ()
   (interactive)
@@ -259,8 +243,6 @@ occurence of CHAR."
       (message (shell-command-to-string cmd-str))
       )))
 
-(define-key global-map (kbd "C-c y") 'rb-eval-var)
-
 ;;;;for testdatas
 (defun rb-eval9018 ()
   (interactive)
@@ -270,8 +252,6 @@ occurence of CHAR."
                  "\"" (get-mark-content (current-buffer))  "\"")))
     (message (shell-command-to-string cmd-str))
     ))
-
-(define-key global-map (kbd "C-c o") 'rb-eval9018) ;; C-x p
 
 ;;;;=> 如果是测试纯函数方法,需要提取方法上面的注释内容作为测试用法, 在drb服务端用lambda包住传进来的方法定义放上面＋注释用法调用放下面 : `#update_has_many_relation User.last(2), :post { |post| post.name="steve" } `
 ;; ==> 解决双单引号报错的问题
@@ -287,8 +267,6 @@ occurence of CHAR."
     (message (shell-command-to-string cmd-str))
     ))
 
-(define-key global-map (kbd "C-c j") 'rb-eval-expression-at)
-
 ;;; for other testdatas project: drb9018
 (defun rb-eval-expression-at9018 ()
   (interactive)
@@ -298,8 +276,6 @@ occurence of CHAR."
                  "\"" (get-rb-obj-body)  "\"")))
     (message (shell-command-to-string cmd-str))
     ))
-
-(define-key global-map (kbd "C-c k") 'rb-eval-expression-at9018) ;; C-x j
 
 ;;;;;;;;; prod export data to dev
 (defun prod-to-dev-datas ()
@@ -362,8 +338,6 @@ occurence of CHAR."
                  "  " (number-to-string (line-number-at-pos)))))
     (shell-command-to-string cmd-str)))
 
-;;;;(define-key global-map (kbd "C-c y") 'get-rb-obj-body)
-
 ;;; (get-rb-obj-body-line-number 1) ==> 获取注释下面一行的表达式体
 (defun get-rb-obj-body-line-number (line-number)
   (interactive)
@@ -395,10 +369,6 @@ occurence of CHAR."
                  ;; "\""
                  )))
     (message (shell-command-to-string cmd-str))))
-
-;;;C-c C-j整体  + C-c p局部Mark + C-c t wy-go-to-char
-;;; 没有错误提示
-(define-key global-map (kbd "C-c C-j") 'rb-eval-expression-at-lambda)
 
 ;;;;;;;;; Ruby纯函数 + `Use db/scheme.rb  & rails scaffold for test & factoryGril as datas`
 ;;;;; 下一个问题是什么: drb 的错误事件捕捉及对应类型生成代码, 用AutoFixErro的我写的Gem去做　==>> `C-c j or C-c p ` drb的错误处理中心，处理错误事件发生的处理, 如果发现不关联那就生成关联语句到项目drb的服务端, 并自动重启drb server服务端
@@ -436,6 +406,36 @@ occurence of CHAR."
     (interactive)
   (get-mark-content (current-buffer)))
 
+
+(defvar kungfu-mode-map
+  (let ((map (make-sparse-keymap)))
+    ;; TODO:
+    (define-key map (kbd "") 'rb-underscore-words)
+    (define-key map (kbd "") 'ruby-parser-mark)
+    (define-key map (kbd "") 'wy-go-to-char)
+    (define-key map (kbd "") 'rb-source-find)
+    (define-key map (kbd "") 'rb-source-find-next)
+    (define-key map (kbd "") 'rb-source-find-next-super)
+    (define-key map (kbd "") 'rb-eval)
+    (define-key map (kbd "") 'rb-eval-var)
+    (define-key map (kbd "") 'rb-eval9018) ;; C-x p
+    (define-key map (kbd "") 'rb-eval-expression-at)
+    (define-key map (kbd "") 'rb-eval-expression-at9018) ;; C-x j
+    ;; (define-key map (kbd "") 'get-rb-obj-body)
+    ;; C-c C-j 整体  + C-c p 局部 Mark + C-c t wy-go-to-char
+    (define-key global-map (kbd "C-c C-j") 'rb-eval-expression-at-lambda)
+    map))
+
+(define-minor-mode kungfu-mode
+  "Minor mode for interactive development for Ruby Gem.
+
+The following commands are available:
+
+\\{kungfu-mode-map}"
+  nil " kungfu" kungfu-mode-map
+  (add-hook 'ruby-mode-hook 'kungfu-mode)
+  (add-hook 'enh-ruby-mode-hook 'kungfu-mode)
+  )
 
 (provide 'kungfu)
 
