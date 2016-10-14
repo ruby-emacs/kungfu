@@ -12,45 +12,42 @@
   :group 'languages)
 
 
-(defvar home-path
-  (replace-regexp-in-string "/\\(\\w+\\)/\\(\\w+\\)/\\(.*\\)"
-                            "/\\1/\\2" (getenv "PWD")))
+(defvar home-path (getenv "HOME"))
 
-(defun get-messages-content ()
-  (with-current-buffer "*Messages*"
-    (buffer-substring-no-properties (point-min) (point-max))))
-
-(defun get-messages-last-line ()
-  (car
-   (last
-    (butlast
-     (split-string (get-messages-content) "\n") ))))
-
-;;  (get-mark-content (current-buffer))
 (defun get-mark-content (buffername)
+  "Get region marked content in `BUFFERNAME'."
   (with-current-buffer buffername
     (buffer-substring-no-properties (region-beginning) (region-end))))
+
+(defun get-point-keyword ()
+  "Get point symbol."
+  (set-mark-command nil)
+  (forward-sexp 1)
+  (get-mark-content (current-buffer)))
 
 (defun relace-region-str (str)
   (progn
     (kill-region (region-beginning) (region-end))
-    (insert str)) ) 
+    (insert str)))
 
 (defun downcase-str ()
   (let ((str (get-mark-content (current-buffer))))
     (downcase str)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Eval: (rb-underscore "AdddTaaaGaaa") => "addd_taaa_gaaa"
 (defun rb-underscore (str)
-  (let ((cmd-str (concat "drb " home-path
-                         "/clojure_emacs/drb-help/rb-underscore.drb " str)))
-    (shell-command-to-string cmd-str) ))
+  (let ((cmd-str
+         (concat "drb" home-path
+                 "/clojure_emacs/drb-help/rb-underscore.drb " str)))
+    (shell-command-to-string cmd-str)))
 
 (defun rb-underscore-words ()
   (interactive)
+  (rb-underscore (get-point-keyword))
   (let ((cmd-str (concat "drb " home-path
                          "/clojure_emacs/drb-help/rb-underscore.drb "
-                         (get-point-keyword) )))
+                         (get-point-keyword))))
     (relace-region-str (shell-command-to-string cmd-str))))
 
 (defun rb-camelize (str)
@@ -61,14 +58,14 @@
 (defun ruby-parser (str)
   (let ((cmd-str (concat "drb " home-path
                          "/clojure_emacs/drb-help/ruby_parser.drb "
-                         "\"" str "\"")))
+                         str)))
     (shell-command-to-string cmd-str)))
 
 (defun ruby-parser-mark ()
   (interactive)
   (let ((cmd-str (concat "drb " home-path
                          "/clojure_emacs/drb-help/ruby_parser.drb "
-                         "\"" (get-mark-content (current-buffer))  "\"")))
+                         (get-point-keyword))))
     (message (shell-command-to-string cmd-str)) ))
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
@@ -232,7 +229,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb " home-path
                  "/clojure_emacs/drb-help/binding_eval.drb "
-                 "\"" (get-mark-content (current-buffer))  "\"")))
+                 (get-mark-content (current-buffer)))))
     (message (shell-command-to-string cmd-str))))
 
 (defun rb-eval-var ()
@@ -240,7 +237,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb " home-path
                  "/clojure_emacs/drb-help/binding_eval.drb "
-                 "\"" (get-point-keyword)  "\"")))
+                 (get-point-keyword))))
     (progn
       ;;(keyboard-quit) 
       (message (shell-command-to-string cmd-str))
@@ -252,7 +249,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb9018 " home-path
                  "/clojure_emacs/drb-help/binding_eval.drb "
-                 "\"" (get-mark-content (current-buffer))  "\"")))
+                 (get-mark-content (current-buffer)))))
     (message (shell-command-to-string cmd-str))
     ))
 
@@ -265,7 +262,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb " home-path
                  "/clojure_emacs/drb-help/binding_eval.drb "
-                 "\"" (get-rb-obj-body)  "\"")))
+                 (get-rb-obj-body))))
     ;; cmd-str ==> "drb /home/clojure/clojure_emacs/drb-help/binding_eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
     (message (shell-command-to-string cmd-str))
     ))
@@ -276,7 +273,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb9018 " home-path
                  "/clojure_emacs/drb-help/binding_eval.drb "
-                 "\"" (get-rb-obj-body)  "\"")))
+                 (get-rb-obj-body))))
     (message (shell-command-to-string cmd-str))
     ))
 
@@ -286,7 +283,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb9018 " home-path
                  "/clojure_emacs/drb-help/binding_eval_prod_to_dev.drb "
-                 "\"" (get-rb-obj-body)  "\"")))
+                 (get-rb-obj-body))))
     (message (shell-command-to-string cmd-str))
     ))
 ;;;;;;;;;;;;;; for spec
@@ -310,7 +307,7 @@ occurence of CHAR."
   (let ((cmd-str
          (concat "drb9 " home-path
                  "/clojure_emacs/drb-help/method-find-call.drb9 "
-                 "\"" (get-mark-content (current-buffer))  "\""))) 
+                 (get-mark-content (current-buffer))))) 
     (message (shell-command-to-string cmd-str))))
 
 (defun is-rb-params ()
@@ -318,17 +315,10 @@ occurence of CHAR."
   (let ((cmd-str
          (concat home-path
                  "/clojure_emacs/rkt-help/params_type "
-                 "\"" (ruby-parser-mark)  "\"")))
+                 (ruby-parser-mark))))
     (message (shell-command-to-string cmd-str))))
 
 ;;;;;
-
-(defun get-point-keyword ()
-  (interactive)
-  (progn  
-    (set-mark-command nil)
-    (forward-sexp 1) 
-    (get-mark-content (current-buffer))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; %Q{aaa dsadas dsads}.gsub(/a/, %q{A}) 已支持
@@ -362,14 +352,12 @@ occurence of CHAR."
   (let ((cmd-str
          ;; FIXME:
          (concat "drb " home-path "/clojure_emacs/drb-help/binding_eval.drb "
-                 ;; "\"" ;;
                  ;; "-> { " 
                  (get-rb-obj-body-line-number 1) ;; "
                  (replace-regexp-in-string "^[[:space:]]+#" ""
                                            (get-rb-obj-body-line-number 0))
 
                  ;; " }[] "
-                 ;; "\""
                  )))
     (message (shell-command-to-string cmd-str))))
 
@@ -403,11 +391,6 @@ occurence of CHAR."
 ;;; 检查drb server 9000 是否启动 ;;;;;;;; drb传异常给Emacs
 (defun drb-server-check ()
   (message "The drb server is start"))
-
-;; 打印到minibuffer然后再C-v复制出来吧
-(defun copy
-    (interactive)
-  (get-mark-content (current-buffer)))
 
 
 (defvar kungfu-mode-map
