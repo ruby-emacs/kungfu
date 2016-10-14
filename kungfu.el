@@ -1,3 +1,14 @@
+;;; kungfu.el --- 
+;;; -*- coding: utf-8 -*-
+
+;;; Commentary:
+
+
+
+;;; Code:
+;;; ----------------------------------------------------------------------------
+
+
 (defvar home-path (replace-regexp-in-string "/\\(\\w+\\)/\\(\\w+\\)/\\(.*\\)" "/\\1/\\2" (getenv "PWD")) )
 
 (defun get-messages-content ()
@@ -388,3 +399,4 @@ occurence of CHAR."
 
 (provide 'kungfu)
 
+;;; kungfu.el ends here
