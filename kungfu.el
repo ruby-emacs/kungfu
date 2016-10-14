@@ -1,4 +1,4 @@
-;;; kungfu.el --- 
+;;; kungfu.el --- Minor mode for interactive development for Ruby Gem.
 ;;; -*- coding: utf-8 -*-
 
 ;;; Commentary:
@@ -7,6 +7,9 @@
 
 ;;; Code:
 ;;; ----------------------------------------------------------------------------
+(defgroup kungfu nil
+  "Minor mode for interactive development for Ruby Gem."
+  :group 'languages)
 
 
 (defvar home-path
