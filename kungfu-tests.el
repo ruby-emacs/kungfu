@@ -54,22 +54,15 @@
     (ruby-parser "def index a; a + 1; end")
     "s(:defn, :index, s(:args, :a), s(:call, s(:lvar, :a), :+, s(:lit, 1)))") ))
 
-;;(defun get-mark-content (arg) "->a{a}")
-;;(pop (split-string "dasdsa \n dasdsa \n " "\n")) , erro
-;;(car (last (butlast '(1 2 5 8 1 3)))) ;;=> 1
-;; ==== 在Emacs中运行是正确的,在命令运行是错误的
-;; (ert-deftest ruby-parser-mark ()
-;;   (should
-;;    (equal
-;;     (ruby-parser-mark)
-;;     (get-messages-last-line))
-;;    ))
-;; 
+(ert-deftest ruby-parser-mark ()
+  (defun get-mark-content (arg) "->a{a}") ;; mock method
+  (should
+   (equal
+    (ruby-parser-mark)
+    "s(:iter, s(:call, nil, :lambda), s(:args, :a), s(:lvar, :a))")
+   ))
 
-;;
-
-;; 在Emacs里验证是正确的, 在命令验证是错的
-;;(ert-deftest rb-source ()
-;;  (equal
-;;   (rb-source "binding.pry")
-;;   (list "/usr/local/rvm/gems/ruby-2.2.3/gems/pry-0.10.4/lib/pry/core_extensions.rb" 41) )  )
+(ert-deftest rb-source ()
+  (equal
+   (last (split-string (car (rb-source "Object.drb_start")) "/"))
+   (list "drbcli.rb")) )

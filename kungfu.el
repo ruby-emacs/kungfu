@@ -66,7 +66,7 @@
   (interactive)
   (let ((cmd-str (concat "drb " kungfu-path
                          "/drb-help/ruby_parser.drb "
-                         (get-point-keyword))))
+                         "'" (get-mark-content (current-buffer)) "'" )))
     (message (shell-command-to-string cmd-str)) ))
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
@@ -123,13 +123,13 @@ occurence of CHAR."
 ;;; Emacs查看Ruby的函数定义跳转: Mark "obj.method" => rb-source
 (defun rb-source (obj-call-method)
   (interactive)
-  (first
+  (car ;;first one
    (last
     (read
      (shell-command-to-string
       (concat " drb " kungfu-path
               "/drb-help/rb_source.drb "
-              obj-call-method)) ))) )
+              obj-call-method)) ))))
 
 (defvar rb-obj-root nil)
 (defvar rb-method-root nil)
