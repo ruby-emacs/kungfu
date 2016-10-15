@@ -12,7 +12,8 @@
   :group 'languages)
 
 
-(defvar home-path (getenv "HOME"))
+;(defvar kungfu-path (getenv "HOME"))
+(defvar kungfu-path (concat "  " (getenv "PWD")) )
 
 (defun get-mark-content (buffername)
   "Get region marked content in `BUFFERNAME'."
@@ -38,43 +39,43 @@
 ;; Eval: (rb-underscore "AdddTaaaGaaa") => "addd_taaa_gaaa"
 (defun rb-underscore (str)
   (let ((cmd-str
-         (concat "drb" home-path
-                 "/clojure_emacs/drb-help/rb-underscore.drb " str)))
+         (concat "drb" kungfu-path
+                 "/drb-help/rb-underscore.drb " str)))
     (shell-command-to-string cmd-str)))
 
 (defun rb-underscore-words ()
   (interactive)
   (rb-underscore (get-point-keyword))
-  (let ((cmd-str (concat "drb " home-path
-                         "/clojure_emacs/drb-help/rb-underscore.drb "
+  (let ((cmd-str (concat "drb " kungfu-path
+                         "/drb-help/rb-underscore.drb "
                          (get-point-keyword))))
     (relace-region-str (shell-command-to-string cmd-str))))
 
 (defun rb-camelize (str)
-  (let ((cmd-str (concat "drb " home-path
-                         "/clojure_emacs/drb-help/rb-camelize.drb " str)))
+  (let ((cmd-str (concat "drb " kungfu-path
+                         "/drb-help/rb-camelize.drb " str)))
     (shell-command-to-string cmd-str))) 
 
 (defun ruby-parser (str)
-  (let ((cmd-str (concat "drb " home-path
-                         "/clojure_emacs/drb-help/ruby_parser.drb "
-                         str)))
+  (let ((cmd-str (concat "drb " kungfu-path
+                         "/drb-help/ruby_parser.drb "
+                         "'" str "'")))
     (shell-command-to-string cmd-str)))
 
 (defun ruby-parser-mark ()
   (interactive)
-  (let ((cmd-str (concat "drb " home-path
-                         "/clojure_emacs/drb-help/ruby_parser.drb "
+  (let ((cmd-str (concat "drb " kungfu-path
+                         "/drb-help/ruby_parser.drb "
                          (get-point-keyword))))
     (message (shell-command-to-string cmd-str)) ))
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
 ;; (defun get-api-to-doc (url)
-;;   (let ((url-cmd   (concat " drb " home-path "/clojure_emacs/drb-help/http.drb " url)))
+;;   (let ((url-cmd   (concat " drb " kungfu-path "/drb-help/http.drb " url)))
 ;;     (shell-command-to-string url-cmd)
 ;;     )
 ;;   )
-;; (add-to-list 'load-path (concat home-path "/clojure_emacs/apib-mode") )
+;; (add-to-list 'load-path (concat kungfu-path "/apib-mode") )
 ;; (autoload 'apib-mode "apib-mode"
 ;;   "Major mode for editing API Blueprint files" t)
 ;; (add-to-list 'auto-mode-alist '("\\.apib\\'" . apib-mode))
@@ -87,18 +88,18 @@
 ;;; 就像zshrc一样使用Elisp: alias v=' vi ~/.zshrc ; echo "Source zshrc ... "; source ~/.zshrc  ' 
 (defun source ()
   (interactive)
-  (load-file (concat home-path "/clojure_emacs/init.el")))
+  (load-file (concat kungfu-path "/init.el")))
 
 ;; ;; Eval: (http-send-apiary "users" "post")
 ;; (defun http-send-apiary (url http-method)
-;;   (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
+;;   (shell-command-to-string (concat " drb " kungfu-path "/drb-help/http_send_for_apiary.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
 ;; 
 ;; ;; 只是单个参数,可以不用Mark,而获取当前行的内容
 ;; (defun http-one-params (url http-method)
-;;   (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary_one.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
+;;   (shell-command-to-string (concat " drb " kungfu-path "/drb-help/http_send_for_apiary_one.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
 ;; 
 ;; (defun http-send-apiary-params (url http-method)
-;;   (shell-command-to-string (concat " drb " home-path "/clojure_emacs/drb-help/http_send_for_apiary_params.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
+;;   (shell-command-to-string (concat " drb " kungfu-path "/drb-help/http_send_for_apiary_params.drb " "http://localhost:3000/api/" url "  \" " (get-mark-content-for-bash (current-buffer)) "\" " http-method ) ) )
 ;; 
 ;; ;; (inf-ruby-switch-setup) + ` C-x C-q `
 ;; (defun ininf ()
@@ -126,8 +127,8 @@ occurence of CHAR."
    (last
     (read
      (shell-command-to-string
-      (concat " drb " home-path
-              "/clojure_emacs/drb-help/rb_source.drb "
+      (concat " drb " kungfu-path
+              "/drb-help/rb_source.drb "
               obj-call-method)) ))) )
 
 (defvar rb-obj-root nil)
@@ -139,8 +140,8 @@ occurence of CHAR."
     (let ((file-and-line
            (second
             (read (shell-command-to-string
-                   (concat " drb " home-path
-                           "/clojure_emacs/drb-help/rb_source.drb " obj-method)))
+                   (concat " drb " kungfu-path
+                           "/drb-help/rb_source.drb " obj-method)))
             )))
       (let ((rb-file (first file-and-line))
             (rb-line (first (last file-and-line))))
@@ -165,8 +166,8 @@ occurence of CHAR."
            (second
             (read
              (shell-command-to-string
-              (concat " drb " home-path
-                      "/clojure_emacs/drb-help/rb_source.drb " obj-method)))
+              (concat " drb " kungfu-path
+                      "/drb-help/rb_source.drb " obj-method)))
             )))
       (if (first file-and-line) 
 
@@ -204,8 +205,8 @@ occurence of CHAR."
            (second
             (read
              (shell-command-to-string
-              (concat " drb " home-path
-                      "/clojure_emacs/drb-help/rb_source.drb " obj-method)))
+              (concat " drb " kungfu-path
+                      "/drb-help/rb_source.drb " obj-method)))
             )))
 
       (let ((rb-file (first file-and-line))
@@ -227,16 +228,16 @@ occurence of CHAR."
 (defun rb-eval ()
   (interactive)
   (let ((cmd-str
-         (concat "drb " home-path
-                 "/clojure_emacs/drb-help/binding_eval.drb "
+         (concat "drb " kungfu-path
+                 "/drb-help/binding_eval.drb "
                  (get-mark-content (current-buffer)))))
     (message (shell-command-to-string cmd-str))))
 
 (defun rb-eval-var ()
   (interactive)
   (let ((cmd-str
-         (concat "drb " home-path
-                 "/clojure_emacs/drb-help/binding_eval.drb "
+         (concat "drb " kungfu-path
+                 "/drb-help/binding_eval.drb "
                  (get-point-keyword))))
     (progn
       ;;(keyboard-quit) 
@@ -247,8 +248,8 @@ occurence of CHAR."
 (defun rb-eval9018 ()
   (interactive)
   (let ((cmd-str
-         (concat "drb9018 " home-path
-                 "/clojure_emacs/drb-help/binding_eval.drb "
+         (concat "drb9018 " kungfu-path
+                 "/drb-help/binding_eval.drb "
                  (get-mark-content (current-buffer)))))
     (message (shell-command-to-string cmd-str))
     ))
@@ -260,10 +261,10 @@ occurence of CHAR."
 (defun rb-eval-expression-at ()
   (interactive)
   (let ((cmd-str
-         (concat "drb " home-path
-                 "/clojure_emacs/drb-help/binding_eval.drb "
+         (concat "drb " kungfu-path
+                 "/drb-help/binding_eval.drb "
                  (get-rb-obj-body))))
-    ;; cmd-str ==> "drb /home/clojure/clojure_emacs/drb-help/binding_eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
+    ;; cmd-str ==> "drb /home/clojure/drb-help/binding_eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
     (message (shell-command-to-string cmd-str))
     ))
 
@@ -271,8 +272,8 @@ occurence of CHAR."
 (defun rb-eval-expression-at9018 ()
   (interactive)
   (let ((cmd-str
-         (concat "drb9018 " home-path
-                 "/clojure_emacs/drb-help/binding_eval.drb "
+         (concat "drb9018 " kungfu-path
+                 "/drb-help/binding_eval.drb "
                  (get-rb-obj-body))))
     (message (shell-command-to-string cmd-str))
     ))
@@ -281,8 +282,8 @@ occurence of CHAR."
 (defun prod-to-dev-datas ()
   (interactive)
   (let ((cmd-str
-         (concat "drb9018 " home-path
-                 "/clojure_emacs/drb-help/binding_eval_prod_to_dev.drb "
+         (concat "drb9018 " kungfu-path
+                 "/drb-help/binding_eval_prod_to_dev.drb "
                  (get-rb-obj-body))))
     (message (shell-command-to-string cmd-str))
     ))
@@ -305,16 +306,16 @@ occurence of CHAR."
 (defun method-find-call ()
   (interactive)
   (let ((cmd-str
-         (concat "drb9 " home-path
-                 "/clojure_emacs/drb-help/method-find-call.drb9 "
+         (concat "drb9 " kungfu-path
+                 "/drb-help/method-find-call.drb9 "
                  (get-mark-content (current-buffer))))) 
     (message (shell-command-to-string cmd-str))))
 
 (defun is-rb-params ()
   (interactive)
   (let ((cmd-str
-         (concat home-path
-                 "/clojure_emacs/rkt-help/params_type "
+         (concat kungfu-path
+                 "/rkt-help/params_type "
                  (ruby-parser-mark))))
     (message (shell-command-to-string cmd-str))))
 
@@ -325,8 +326,8 @@ occurence of CHAR."
 (defun get-rb-obj-body ()
   (interactive)
   (let ((cmd-str
-         (concat home-path
-                 "/clojure_emacs/rb-help/expression_at.rb "
+         (concat kungfu-path
+                 "/rb-help/expression_at.rb "
                  (buffer-file-name)
                  "  " (number-to-string (line-number-at-pos)))))
     (shell-command-to-string cmd-str)))
@@ -336,7 +337,7 @@ occurence of CHAR."
   (interactive)
   (line-number-at-pos)
   (let ((cmd-str
-         (concat home-path "/clojure_emacs/rb-help/expression_at.rb "
+         (concat kungfu-path "/rb-help/expression_at.rb "
                  (buffer-file-name)
                  "  " (number-to-string (+ line-number (line-number-at-pos))))))
     (message (shell-command-to-string cmd-str))))
@@ -351,7 +352,7 @@ occurence of CHAR."
   (interactive)
   (let ((cmd-str
          ;; FIXME:
-         (concat "drb " home-path "/clojure_emacs/drb-help/binding_eval.drb "
+         (concat "drb " kungfu-path "/drb-help/binding_eval.drb "
                  ;; "-> { " 
                  (get-rb-obj-body-line-number 1) ;; "
                  (replace-regexp-in-string "^[[:space:]]+#" ""
@@ -367,8 +368,8 @@ occurence of CHAR."
   (interactive)
   (line-number-at-pos)
   (let ((cmd-str
-         (concat "drb " home-path
-                 "/clojure_emacs/drb-help/expression_at_for_schema.drb "
+         (concat "drb " kungfu-path
+                 "/drb-help/expression_at_for_schema.drb "
                  (buffer-file-name)  "  "
                  (number-to-string (line-number-at-pos)))))
     (progn 
@@ -381,8 +382,8 @@ occurence of CHAR."
 (defun rails-scaffold-str ()
   (line-number-at-pos)
   (let ((cmd-str
-         (concat "drb " home-path
-                 "/clojure_emacs/drb-help/expression_at_for_schema.drb "
+         (concat "drb " kungfu-path
+                 "/drb-help/expression_at_for_schema.drb "
                  (buffer-file-name)  "  "
                  (number-to-string (line-number-at-pos)))))
     (progn

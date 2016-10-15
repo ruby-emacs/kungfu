@@ -1,0 +1,6 @@
+# brakeman rails/project #=> tracker.find_call `drb_start binding ` 9009 
+rbmethod = @drb_args.first
+map_inspect = -> res { res.map(&:inspect) }
+tra_res = tracker.find_call(:method => rbmethod.to_sym)
+map_inspect.(tra_res)
+

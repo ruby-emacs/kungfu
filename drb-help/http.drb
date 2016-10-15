@@ -1,0 +1,4 @@
+url = @drb_args.first
+result = HTTParty.get(url)
+rhash = JSON.parse(result.body)
+rhash.map(& -> k, v { "- #{k}: \`#{v.nil? ? rand : v}\`" + " (string)" }).join("\n")

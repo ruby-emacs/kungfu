@@ -1,0 +1,2 @@
+code=@drb_args.first
+(RubyParser.new.parse code).inspect

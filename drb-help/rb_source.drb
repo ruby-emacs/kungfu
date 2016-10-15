@@ -1,0 +1,16 @@
+# coding: utf-8
+def to_list(arrays)
+  arrays.inspect.gsub(/\[/, "(").gsub(/\]/, ")").gsub(/,/, "").sub(/^/, "'")
+end
+obj_method = @drb_args.first.split('.')
+begin
+  begin 
+    @result = (eval "#{obj_method.first}.method(:#{obj_method.last}).source_location")
+  rescue => e
+    @result = (eval "#{obj_method.first}.instance_method(:#{obj_method.last}).source_location")
+  end
+rescue => e
+  @result = [nil, obj_method.last]
+end
+# 返回一个lisp的列表
+to_list @result

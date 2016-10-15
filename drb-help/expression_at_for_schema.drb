@@ -1,0 +1,20 @@
+# Use: drb drb-help/expression_at_for_schema.drb /home/clojure/xogrp/Web-API/db/schema.rb 105
+require 'ostruct'
+$out_cmd_puts = []
+def create_table(*args, &block)
+  $out_cmd_puts << "rails-api g scaffold #{args.first} -f "
+  t = OpenStruct.new
+  def t.method_missing(method, *aaa)
+    pinfo = "#{aaa.first.underscore}:#{method}"
+    $out_cmd_puts << pinfo.to_s
+  end
+  block.call(t)
+end
+file_str = open(@drb_args.first){ |f| f.read }
+content = expression_at(file_str, @drb_args.last.to_i)
+
+eval content
+
+scaffold_cmd = $out_cmd_puts.join(" ")
+$out_cmd_puts = nil
+scaffold_cmd
