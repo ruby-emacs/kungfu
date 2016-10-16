@@ -68,6 +68,7 @@
     (last (split-string (car (rb-source "Object.drb_start")) "/"))
     (list "drbcli.rb"))) )
 
+;; Base rb-source, and add `find-file` & `goto-line`
 (ert-deftest rb-source-find ()
   (defun get-mark-content (arg) "Object.drb_start")
   (defun find-file (file) (message "+++++%s+++++" file) )
@@ -80,7 +81,7 @@
   (makunbound 'find-line)
   (makunbound 'rb-obj-root)
   )
-
+;; Base rb-source-find's object: rb-obj-root "Post", find it's methods have the method "ccc"
 (ert-deftest rb-source-find-next ()
   (rb-eval "class Post; \n def aaa;222;end; \n def self.bbb;ccc;end; \n def self.ccc; 111; end ; \n end; \n @post = Post.new")
   ;;(rb-source "Post.bbb") ;; 3
@@ -89,6 +90,20 @@
   (defun find-file (file) (message "+++++%s+++++" file) )
   (defun goto-line (line buffer) (progn (message "----%s-----%s" line buffer) (set 'find-buffer buffer) (set 'find-line line) ) )
   (rb-source-find-next)
+  (should (equal find-buffer "(eval)"))
+  (should (equal find-line 4))
+  (makunbound 'find-buffer)
+  (makunbound 'find-line)
+  )
+
+;; when rb-source-find-next's rb-method-root "ccc" is not belongs to rb-obj-root "Post", the file name will as the new Object name
+(ert-deftest rb-source-find-next-super ()
+  (defun buffer-file-name () "abc/lib/post.rb")
+  (setq rb-method-root "ccc")
+  (rb-eval "class Post; \n def aaa;222;end; \n def self.bbb;ccc;end; \n def self.ccc; 111; end ; \n end; \n @post = Post.new")
+  (defun find-file (file) (message "+++++%s+++++" file) )
+  (defun goto-line (line buffer) (progn (message "----%s-----%s" line buffer) (set 'find-buffer buffer) (set 'find-line line) ) )
+  (rb-source-find-next-super)
   (should (equal find-buffer "(eval)"))
   (should (equal find-line 4))
   (makunbound 'find-buffer)
