@@ -235,12 +235,12 @@ occurence of CHAR."
           )))))
 
 ;; Like `C-x C-e` eval the ruby expression, such as: `User.first.id` => 3
-(defun rb-eval ()
+(defun rb-eval (str)
   (interactive)
   (let ((cmd-str
          (concat "drb " kungfu-path
                  "/drb-help/binding_eval.drb "
-                 (get-mark-content (current-buffer)))))
+                 "'" str "'")))
     (message (shell-command-to-string cmd-str))))
 
 (defun rb-eval-var ()

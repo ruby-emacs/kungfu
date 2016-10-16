@@ -78,4 +78,20 @@
   (should (equal rb-obj-root "Object"))
   (makunbound 'find-buffer)
   (makunbound 'find-line)
+  (makunbound 'rb-obj-root)
   )
+
+(ert-deftest rb-source-find-next ()
+  (rb-eval "class Post; \n def aaa;222;end; \n def self.bbb;ccc;end; \n def self.ccc; 111; end ; \n end; \n @post = Post.new")
+  ;;(rb-source "Post.bbb") ;; 3
+  (set 'rb-obj-root "Post")
+  (defun get-mark-content (arg) "ccc")
+  (defun find-file (file) (message "+++++%s+++++" file) )
+  (defun goto-line (line buffer) (progn (message "----%s-----%s" line buffer) (set 'find-buffer buffer) (set 'find-line line) ) )
+  (rb-source-find-next)
+  (should (equal find-buffer "(eval)"))
+  (should (equal find-line 4))
+  (makunbound 'find-buffer)
+  (makunbound 'find-line)
+  )
+
