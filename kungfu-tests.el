@@ -63,6 +63,19 @@
    ))
 
 (ert-deftest rb-source ()
-  (equal
-   (last (split-string (car (rb-source "Object.drb_start")) "/"))
-   (list "drbcli.rb")) )
+  (should
+   (equal
+    (last (split-string (car (rb-source "Object.drb_start")) "/"))
+    (list "drbcli.rb"))) )
+
+(ert-deftest rb-source-find ()
+  (defun get-mark-content (arg) "Object.drb_start")
+  (defun find-file (file) (message "+++++%s+++++" file) )
+  (defun goto-line (line buffer) (progn (message "----%s-----%s" line buffer) (set 'find-buffer buffer) (set 'find-line line) ) )
+  (rb-source-find)
+  (should (equal find-buffer "drbcli.rb"))
+  (should (equal find-line 16))
+  (should (equal rb-obj-root "Object"))
+  (makunbound 'find-buffer)
+  (makunbound 'find-line)
+  )

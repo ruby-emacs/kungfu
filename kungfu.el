@@ -7,6 +7,7 @@
 
 ;;; Code:
 ;;; ----------------------------------------------------------------------------
+(require 'cl)
 (defgroup kungfu nil
   "Minor mode for interactive development for Ruby Gem."
   :group 'languages)
@@ -14,6 +15,15 @@
 
 ;(defvar kungfu-path (getenv "HOME"))
 (defvar kungfu-path (concat "  " (getenv "PWD")) )
+
+(defun get-messages-content ()
+  (with-current-buffer "*Messages*" (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun get-messages-last-line ()
+  (car
+   (last
+    (butlast
+     (split-string (get-messages-content) "\n") ))) )
 
 (defun get-mark-content (buffername)
   "Get region marked content in `BUFFERNAME'."
