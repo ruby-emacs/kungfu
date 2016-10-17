@@ -336,8 +336,8 @@ occurence of CHAR."
 (defun get-rb-obj-body ()
   (interactive)
   (let ((cmd-str
-         (concat kungfu-path
-                 "/rb-help/expression_at.rb "
+         (concat "drb " kungfu-path
+                 "/drb-help/expression_at.rb "
                  (buffer-file-name)
                  "  " (number-to-string (line-number-at-pos)))))
     (shell-command-to-string cmd-str)))
@@ -347,7 +347,7 @@ occurence of CHAR."
   (interactive)
   (line-number-at-pos)
   (let ((cmd-str
-         (concat kungfu-path "/rb-help/expression_at.rb "
+         (concat "drb " kungfu-path "/drb-help/expression_at.rb "
                  (buffer-file-name)
                  "  " (number-to-string (+ line-number (line-number-at-pos))))))
     (message (shell-command-to-string cmd-str))))

@@ -128,5 +128,6 @@ def aaa;
 end
 ")
   (defun line-number-at-pos () 126)
-  (message "==%s==" (get-rb-obj-body))
+  (defun buffer-file-name ()  (concat kungfu-path "/kungfu-tests.el"))
+  (should (equal (get-rb-obj-body) "def aaa;\n  111;\nend\n"))
   )
