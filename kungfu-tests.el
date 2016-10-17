@@ -121,3 +121,12 @@
   (should (equal (rb-eval-var) "11"))
   )
 
+(ert-deftest get-rb-obj-body ()
+  (rb-eval "
+def aaa;
+  111;
+end
+")
+  (defun line-number-at-pos () 126)
+  (message "==%s==" (get-rb-obj-body))
+  )
