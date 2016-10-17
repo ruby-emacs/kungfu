@@ -131,3 +131,15 @@ end
   (defun buffer-file-name ()  (concat kungfu-path "/kungfu-tests.el"))
   (should (equal (get-rb-obj-body) "def aaa;\n  111;\nend\n"))
   )
+
+(ert-deftest get-rb-obj-body-line-number ()
+  (rb-eval "
+123;
+def aaa;
+  111;
+end
+")
+  (defun line-number-at-pos () 137)
+  (defun buffer-file-name ()  (concat kungfu-path "/kungfu-tests.el"))
+  (should (equal (get-rb-obj-body-line-number 1) "def aaa;\n  111;\nend\n"))
+  )
