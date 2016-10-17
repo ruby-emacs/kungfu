@@ -1,7 +1,7 @@
 (require 'ert)
 (load-file "./kungfu.el")
 (require 'kungfu)
-
+(drb-server-check)
 
 ;;;; for mock test ;;; 
 (defun my-fixture (body)

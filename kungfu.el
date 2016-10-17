@@ -400,8 +400,9 @@ occurence of CHAR."
 
 ;;; 检查drb server 9000 是否启动 ;;;;;;;; drb传异常给Emacs
 (defun drb-server-check ()
-  (message "The drb server is start"))
-
+  (if (equal (rb-eval "1") "1")
+      (message "The drb server is start")
+    (progn (message "========= The drb server is not start, please start the drb server by code: 'drb_start binding' in your ruby code :)=======") (suspend-frame)) ) )
 
 (defvar kungfu-mode-map
   (let ((map (make-sparse-keymap)))
