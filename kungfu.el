@@ -361,16 +361,15 @@ occurence of CHAR."
 (defun rb-eval-expression-at-lambda ()
   (interactive)
   (let ((cmd-str
-         ;; FIXME:
          (concat "drb " kungfu-path "/drb-help/binding_eval.drb "
-                 ;; "-> { " 
-                 (get-rb-obj-body-line-number 1) ;; "
-                 (replace-regexp-in-string "^[[:space:]]+#" ""
-                                           (get-rb-obj-body-line-number 0))
-
-                 ;; " }[] "
-                 )))
-    (message (shell-command-to-string cmd-str))))
+		 "' " "-> { " 
+		 (get-rb-obj-body-line-number 1) " ; "
+		 (replace-regexp-in-string
+		  "^[[:space:]]?#" ""
+		  (get-rb-obj-body-line-number 0)) 
+		 " }[] " " '"
+		 )))
+    (message (shell-command-to-string cmd-str) )) )
 
 ;;;;;;;;; Ruby纯函数 + `Use db/scheme.rb  & rails scaffold for test & factoryGril as datas`
 ;;;;; 下一个问题是什么: drb 的错误事件捕捉及对应类型生成代码, 用AutoFixErro的我写的Gem去做　==>> `C-c j or C-c p ` drb的错误处理中心，处理错误事件发生的处理, 如果发现不关联那就生成关联语句到项目drb的服务端, 并自动重启drb server服务端
