@@ -12,12 +12,11 @@
   "Minor mode for interactive development for Ruby Gem."
   :group 'languages)
 
-
-;(defvar kungfu-path (getenv "HOME"))
 (defvar kungfu-path (concat "  " (getenv "PWD")) )
 
 (defun get-messages-content ()
-  (with-current-buffer "*Messages*" (buffer-substring-no-properties (point-min) (point-max))))
+  (with-current-buffer "*Messages*"
+    (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun get-messages-last-line ()
   (car
@@ -45,13 +44,23 @@
   (let ((str (get-mark-content (current-buffer))))
     (downcase str)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Eval: (rb-underscore "AdddTaaaGaaa") => "addd_taaa_gaaa"
+
+(defun drb-shell (cmd fn &rest args) 
+  (let* ((args
+	  (if (null args) ""
+	    (concat " '" (reduce (lambda (s i) (concat s "' '" i)) args) "' ") ))
+	 (cmd-str
+	  (concat "drb" kungfu-path
+		  "/drb-help/" cmd ".drb " args)))
+    (funcall fn (shell-command-to-string cmd-str))
+    )
+  )
+
 (defun rb-underscore (str)
-  (let ((cmd-str
-         (concat "drb" kungfu-path
-                 "/drb-help/rb-underscore.drb " str)))
-    (shell-command-to-string cmd-str)))
+  (drb-shell
+   "rb-underscore"
+   (lambda (com-str) (message com-str)) str)
+  )
 
 (defun rb-underscore-words ()
   (interactive)
