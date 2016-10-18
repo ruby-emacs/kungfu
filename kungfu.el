@@ -64,29 +64,24 @@
 
 (defun rb-underscore-words ()
   (interactive)
-  (rb-underscore (get-point-keyword))
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/rb-underscore.drb "
-                         (get-point-keyword))))
-    (relace-region-str (shell-command-to-string cmd-str))))
+  (rb-underscore (get-point-keyword)) )
 
 (defun rb-camelize (str)
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/rb-camelize.drb " str)))
-    (shell-command-to-string cmd-str))) 
+  (drb-shell
+   "rb-camelize"
+   (lambda (com-str) (message com-str)) str)
+  )
 
 (defun ruby-parser (str)
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/ruby_parser.drb "
-                         "'" str "'")))
-    (shell-command-to-string cmd-str)))
+  (drb-shell
+   "ruby-parser"
+   (lambda (com-str) (message com-str)) str)
+  )
 
 (defun ruby-parser-mark ()
   (interactive)
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/ruby_parser.drb "
-                         "'" (get-mark-content (current-buffer)) "'" )))
-    (message (shell-command-to-string cmd-str)) ))
+  (ruby-parser (get-mark-content (current-buffer)))
+  )
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
 ;; (defun get-api-to-doc (url)
