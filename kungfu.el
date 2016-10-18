@@ -63,10 +63,11 @@
       str) )
   )
 
-(drb-commands "underscore")
+(drb-commands "underscore") ;;=> genarate: rb-underscore function
 (drb-commands "camelize")
 (drb-commands "parser")
-(drb-commands "source-location")
+(drb-commands "source-location") ;;=> source-location
+(pp (macroexpand-all '(drb-commands "binding-eval")))
 
 (defun rb-parser-mark ()
   (interactive)
@@ -210,19 +211,22 @@ occurence of CHAR."
           )))))
 
 ;; Like `C-x C-e` eval the ruby expression, such as: `User.first.id` => 3
+
 (defun rb-eval (str)
   (interactive)
-  (let ((cmd-str
-         (concat "drb " kungfu-path
-                 "/drb-help/binding_eval.drb "
-                 "'" str "'")))
-    (message (shell-command-to-string cmd-str))))
+  (message (rb-binding-eval str)))
+;;  (let ((cmd-str
+;;         (concat "drb " kungfu-path
+;;                 "/drb-help/rb-eval.drb "
+;;                 "'" str "'")))
+;;    (message (shell-command-to-string cmd-str))))
+;;
 
 (defun rb-eval-var ()
   (interactive)
   (let ((cmd-str
          (concat "drb " kungfu-path
-                 "/drb-help/binding_eval.drb "
+                 "/drb-help/rb-eval.drb "
                  (get-point-keyword))))
     (progn
       ;;(keyboard-quit) 
@@ -234,7 +238,7 @@ occurence of CHAR."
   (interactive)
   (let ((cmd-str
          (concat "drb9018 " kungfu-path
-                 "/drb-help/binding_eval.drb "
+                 "/drb-help/rb-eval.drb "
                  (get-mark-content (current-buffer)))))
     (message (shell-command-to-string cmd-str))
     ))
@@ -247,9 +251,9 @@ occurence of CHAR."
   (interactive)
   (let ((cmd-str
          (concat "drb " kungfu-path
-                 "/drb-help/binding_eval.drb "
+                 "/drb-help/rb-eval.drb "
                  (get-rb-obj-body))))
-    ;; cmd-str ==> "drb /home/clojure/drb-help/binding_eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
+    ;; cmd-str ==> "drb /home/clojure/drb-help/rb-eval.drb \"  \"aaa dsadas dsads\".gsub(/a/, 'A') \""
     (message (shell-command-to-string cmd-str))
     ))
 
@@ -258,7 +262,7 @@ occurence of CHAR."
   (interactive)
   (let ((cmd-str
          (concat "drb9018 " kungfu-path
-                 "/drb-help/binding_eval.drb "
+                 "/drb-help/rb-eval.drb "
                  (get-rb-obj-body))))
     (message (shell-command-to-string cmd-str))
     ))
@@ -268,7 +272,7 @@ occurence of CHAR."
   (interactive)
   (let ((cmd-str
          (concat "drb9018 " kungfu-path
-                 "/drb-help/binding_eval_prod_to_dev.drb "
+                 "/drb-help/rb-eval_prod_to_dev.drb "
                  (get-rb-obj-body))))
     (message (shell-command-to-string cmd-str))
     ))
@@ -336,7 +340,7 @@ occurence of CHAR."
 (defun rb-eval-expression-at-lambda ()
   (interactive)
   (let ((cmd-str
-         (concat "drb " kungfu-path "/drb-help/binding_eval.drb "
+         (concat "drb " kungfu-path "/drb-help/rb-eval.drb "
 		 "' " "-> { " 
 		 (get-rb-obj-body-line-number 1) " ; "
 		 (replace-regexp-in-string
