@@ -59,12 +59,14 @@
   `(defun ,(intern (format "rb-%s" cmd)) (str)
      (drb-shell
       (format "rb-%s" ,cmd)
-      (lambda (com-str) (message com-str)) str) )
+      (lambda (com-str) com-str)
+      str) )
   )
 
 (drb-commands "underscore")
 (drb-commands "camelize")
 (drb-commands "parser")
+(drb-commands "source-location")
 
 (defun rb-parser-mark ()
   (interactive)
@@ -129,13 +131,12 @@ occurence of CHAR."
 ;;; Emacs查看Ruby的函数定义跳转: Mark "obj.method" => rb-source
 (defun rb-source (obj-call-method)
   (interactive)
-  (car ;;first one
+  (car
    (last
     (read
-     (shell-command-to-string
-      (concat " drb " kungfu-path
-              "/drb-help/rb_source.drb "
-              obj-call-method)) ))))
+     (rb-source-location obj-call-method)
+     )))
+  )
 
 (defvar rb-obj-root nil)
 (defvar rb-method-root nil)
@@ -143,12 +144,7 @@ occurence of CHAR."
 (defun rb-source-find ()
   (interactive)
   (let ((obj-method (get-mark-content (current-buffer))))
-    (let ((file-and-line
-           (second
-            (read (shell-command-to-string
-                   (concat " drb " kungfu-path
-                           "/drb-help/rb_source.drb " obj-method)))
-            )))
+    (let ((file-and-line (rb-source obj-method)))
       (let ((rb-file (first file-and-line))
             (rb-line (first (last file-and-line))))
         (let ((rb-buffer (first (last (split-string rb-file "/"))))
@@ -168,15 +164,8 @@ occurence of CHAR."
   (interactive) ;;;; only diff in obj-method
   (let ((obj-method
          (concat rb-obj-root "." (get-mark-content (current-buffer)))))
-    (let ((file-and-line
-           (second
-            (read
-             (shell-command-to-string
-              (concat " drb " kungfu-path
-                      "/drb-help/rb_source.drb " obj-method)))
-            )))
+    (let ((file-and-line (rb-source obj-method)))
       (if (first file-and-line) 
-
           (let ((rb-file (first file-and-line))
                 (rb-line (first (last file-and-line))))
             (let ((rb-buffer (first (last (split-string rb-file "/"))))
@@ -206,22 +195,12 @@ occurence of CHAR."
            (first (split-string
                    (first (last (split-string (buffer-file-name) "lib/")))
                    "\\."))) "." rb-method-root)))
-    ;;(message obj-method) ;; Pry::Command.run
     (let ((file-and-line
-           (second
-            (read
-             (shell-command-to-string
-              (concat " drb " kungfu-path
-                      "/drb-help/rb_source.drb " obj-method)))
-            )))
-
+	   (rb-source obj-method)))
       (let ((rb-file (first file-and-line))
             (rb-line (first (last file-and-line))))
         (let ((rb-buffer (first (last (split-string rb-file "/"))))
               (rb-obj (first (split-string obj-method "\\."))))
-          ;;         (message (concat rb-file "===" "245" "===" rb-buffer "=======" rb-obj) )
-          ;; /usr/local/rvm/gems/ruby-2.2.3/gems/pry-0.10.1/lib/pry/command.rb===245===command.rb=======Pry::Command
-
           (progn
             (find-file rb-file)
             (goto-line rb-line rb-buffer)
