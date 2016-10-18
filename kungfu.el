@@ -44,7 +44,6 @@
   (let ((str (get-mark-content (current-buffer))))
     (downcase str)))
 
-
 (defun drb-shell (cmd fn &rest args) 
   (let* ((args
 	  (if (null args) ""
@@ -56,32 +55,25 @@
     )
   )
 
-(defun rb-underscore (str)
-  (drb-shell
-   "rb-underscore"
-   (lambda (com-str) (message com-str)) str)
+(defmacro drb-commands (cmd)
+  `(defun ,(intern (format "rb-%s" cmd)) (str)
+     (drb-shell
+      (format "rb-%s" ,cmd)
+      (lambda (com-str) (message com-str)) str) )
+  )
+
+(drb-commands "underscore")
+(drb-commands "camelize")
+(drb-commands "parser")
+
+(defun rb-parser-mark ()
+  (interactive)
+  (rb-parser (get-mark-content (current-buffer)))
   )
 
 (defun rb-underscore-words ()
   (interactive)
   (rb-underscore (get-point-keyword)) )
-
-(defun rb-camelize (str)
-  (drb-shell
-   "rb-camelize"
-   (lambda (com-str) (message com-str)) str)
-  )
-
-(defun ruby-parser (str)
-  (drb-shell
-   "ruby-parser"
-   (lambda (com-str) (message com-str)) str)
-  )
-
-(defun ruby-parser-mark ()
-  (interactive)
-  (ruby-parser (get-mark-content (current-buffer)))
-  )
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
 ;; (defun get-api-to-doc (url)

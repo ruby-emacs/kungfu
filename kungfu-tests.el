@@ -51,14 +51,14 @@
 (ert-deftest ruby-parser ()
   (should
    (equal
-    (ruby-parser "def index a; a + 1; end")
+    (rb-parser "def index a; a + 1; end")
     "s(:defn, :index, s(:args, :a), s(:call, s(:lvar, :a), :+, s(:lit, 1)))") ))
 
-(ert-deftest ruby-parser-mark ()
+(ert-deftest rb-parser-mark ()
   (defun get-mark-content (arg) "->a{a}") ;; mock method
   (should
    (equal
-    (ruby-parser-mark)
+    (rb-parser-mark)
     "s(:iter, s(:call, nil, :lambda), s(:args, :a), s(:lvar, :a))")
    ))
 
