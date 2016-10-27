@@ -187,25 +187,24 @@ occurence of CHAR."
 ;;; No need Mark any, use (buffer-file-name) as Class name, rb-method-root as method name => ` C-c b `
 (defun rb-source-find-next-super ()
   (interactive) ;;;; only diff in obj-method
-  (let ((obj-method
-         (concat
-          (rb-camelize
-           (first (split-string
-                   (first (last (split-string (buffer-file-name) "lib/")))
-                   "\\."))) "." rb-method-root)))
-    (let ((file-and-line
-	   (rb-source obj-method)))
-      (let ((rb-file (first file-and-line))
-            (rb-line (first (last file-and-line))))
-        (let ((rb-buffer (first (last (split-string rb-file "/"))))
-              (rb-obj (first (split-string obj-method "\\."))))
-          (progn
-            (find-file rb-file)
-            (goto-line rb-line rb-buffer)
-            (message
-             (concat "cool, open the file: " rb-file
-                     " , " (number-to-string rb-line) " , " rb-obj)))
-          )))))
+  (let* ((obj-method
+	  (concat
+	   (rb-camelize
+	    (first (split-string
+		    (first (last (split-string (buffer-file-name) "lib/")))
+		    "\\."))) "." rb-method-root))
+	 (file-and-line
+	  (rb-source obj-method))
+	 (rb-file (first file-and-line))
+	 (rb-line (first (last file-and-line)))
+	 (rb-buffer (first (last (split-string rb-file "/"))))
+	 (rb-obj (first (split-string obj-method "\\."))))
+    (progn
+      (find-file rb-file)
+      (goto-line rb-line rb-buffer)
+      (message
+       (concat "cool, open the file: " rb-file
+	       " , " (number-to-string rb-line) " , " rb-obj))) ))
 
 ;; Like `C-x C-e` eval the ruby expression, such as: `User.first.id` => 3
 (defun rb-eval (str)
