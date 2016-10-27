@@ -143,48 +143,46 @@ occurence of CHAR."
 ;; Mark "instace.method" => "C-c g"
 (defun rb-source-find ()
   (interactive)
-  (let ((obj-method (get-mark-content (current-buffer))))
-    (let ((file-and-line (rb-source obj-method)))
-      (let ((rb-file (first file-and-line))
-            (rb-line (first (last file-and-line))))
-        (let ((rb-buffer (first (last (split-string rb-file "/"))))
-              (rb-obj (first (split-string obj-method "\\."))))
-          (progn
-            (find-file rb-file)
-            (goto-line rb-line rb-buffer)
-            (setq rb-obj-root rb-obj)
-            (message
-             (concat "cool, open the file: " rb-file
-                     " , " (number-to-string rb-line) " , " rb-obj))
-            )
-          )))))
+  (let* ( (obj-method (get-mark-content (current-buffer))) 
+	  (file-and-line (rb-source obj-method))
+	  (rb-file (first file-and-line))
+	  (rb-line (first (last file-and-line)))
+	  (rb-buffer (first (last (split-string rb-file "/"))))
+	  (rb-obj (first (split-string obj-method "\\.")))
+	  )
+    (progn
+      (find-file rb-file)
+      (goto-line rb-line rb-buffer)
+      (setq rb-obj-root rb-obj)
+      (message
+       (concat "cool, open the file: " rb-file
+	       " , " (number-to-string rb-line) " , " rb-obj))
+      )
+    ))
 
 ;; Mark "instace_method" => "C-c n"
 (defun rb-source-find-next ()
   (interactive) ;;;; only diff in obj-method
-  (let ((obj-method
-         (concat rb-obj-root "." (get-mark-content (current-buffer)))))
-    (let ((file-and-line (rb-source obj-method)))
-      (if (first file-and-line) 
-          (let ((rb-file (first file-and-line))
-                (rb-line (first (last file-and-line))))
-            (let ((rb-buffer (first (last (split-string rb-file "/"))))
-                  (rb-obj (first (split-string obj-method "\\."))))
-              (progn
-                (find-file rb-file)
-                (goto-line rb-line rb-buffer)
-                (setq rb-obj-root rb-obj)
-                (message
-                 (concat "cool, open the file: " rb-file
-                         " , " (number-to-string rb-line) " , " rb-obj))
-                )))
-
-        (progn
-          (setq rb-method-root (first (last file-and-line)))
-          (message
-           (concat "please go to rb-method-root : " rb-method-root
-                   " , Run : C-c b"))
-          )))))
+  (let* ((obj-method
+	  (concat rb-obj-root "." (get-mark-content (current-buffer))))
+	 (file-and-line (rb-source obj-method)))
+    (if (first file-and-line)
+	(let* ((rb-file (first file-and-line))
+	       (rb-line (first (last file-and-line)))
+	       (rb-buffer (first (last (split-string rb-file "/"))))
+	       (rb-obj (first (split-string obj-method "\\."))))
+	  (progn
+	    (find-file rb-file)
+	    (goto-line rb-line rb-buffer)
+	    (setq rb-obj-root rb-obj)
+	    (message
+	     (concat "cool, open the file: " rb-file
+		     " , " (number-to-string rb-line) " , " rb-obj)) ))
+      (progn
+	(setq rb-method-root (first (last file-and-line)))
+	(message
+	 (concat "please go to rb-method-root : " rb-method-root
+		 " , Run : C-c b")) ))))
 
 ;;; No need Mark any, use (buffer-file-name) as Class name, rb-method-root as method name => ` C-c b `
 (defun rb-source-find-next-super ()
