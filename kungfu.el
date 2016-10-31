@@ -140,25 +140,29 @@ occurence of CHAR."
 
 (defvar rb-obj-root nil)
 (defvar rb-method-root nil)
+(defun rb-file-infos ()
+  (setq 
+   obj-method (get-mark-content (current-buffer))
+   file-and-line (rb-source obj-method)
+   rb-file (first file-and-line)
+   rb-line (first (last file-and-line))
+   rb-buffer (first (last (split-string rb-file "/")))
+   rb-obj (first (split-string obj-method "\\."))
+   )
+  )
 ;; Mark "instace.method" => "C-c g"
 (defun rb-source-find ()
   (interactive)
-  (let* ( (obj-method (get-mark-content (current-buffer))) 
-	  (file-and-line (rb-source obj-method))
-	  (rb-file (first file-and-line))
-	  (rb-line (first (last file-and-line)))
-	  (rb-buffer (first (last (split-string rb-file "/"))))
-	  (rb-obj (first (split-string obj-method "\\.")))
-	  )
-    (progn
-      (find-file rb-file)
-      (goto-line rb-line rb-buffer)
-      (setq rb-obj-root rb-obj)
-      (message
-       (concat "cool, open the file: " rb-file
-	       " , " (number-to-string rb-line) " , " rb-obj))
-      )
-    ))
+  (progn
+    (rb-file-infos)
+    (find-file rb-file)
+    (goto-line rb-line rb-buffer)
+    (setq rb-obj-root rb-obj)
+    (message
+     (concat "cool, open the file: " rb-file
+	     " , " (number-to-string rb-line) " , " rb-obj))
+    )
+  )
 
 ;; Mark "instace_method" => "C-c n"
 (defun rb-source-find-next ()
