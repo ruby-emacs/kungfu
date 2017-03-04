@@ -1,0 +1,5 @@
+code = @drb_args.first
+(eval "#{code}.attributes.select(& -> pos, value { !%w{created_at updated_at id}.include?(pos) } )").inject({}) do |s, (k, v)|
+  s["%q{#{k}}"] = "%q{#{v}}" ; s
+end.to_s
+

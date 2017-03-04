@@ -1,0 +1,3 @@
+code = @drb_args.first
+(eval "#{code}").inspect
+

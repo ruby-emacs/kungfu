@@ -1,0 +1,10 @@
+# coding: utf-8
+url = @drb_args.first
+lines = @drb_args.second.split(/\n/)
+http_method = @drb_args.last
+#lines.first =~ /- (.*): '(.*)' (.*)/ #$1 #=> user_id $2 #=> 13148287700528583
+body = lines.inject({}) do |s, str|
+  str =~ /- (.*): '(.*)' \((.*)\)/
+  s[$1] = $2; s
+end
+HTTParty.send(http_method, url, :body => body)

@@ -1,0 +1,7 @@
+class Array
+  def to_list
+    inspect.gsub(/\[/, "(").gsub(/\]/, ")").gsub(/,/, "").sub(/^/, "'")
+  end
+end
+
+@drb_args.first.underscore
