@@ -1,6 +1,6 @@
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
-	EMACS := /Users/emacs/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs
+	EMACS := $(HOME)/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs
 else
 	EMACS := emacs
 endif

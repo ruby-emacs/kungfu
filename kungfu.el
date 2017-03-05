@@ -12,12 +12,11 @@
   "Minor mode for interactive development for Ruby Gem."
   :group 'languages)
 
-
-;(defvar kungfu-path (getenv "HOME"))
 (defvar kungfu-path (concat "  " (getenv "PWD")) )
 
 (defun get-messages-content ()
-  (with-current-buffer "*Messages*" (buffer-substring-no-properties (point-min) (point-max))))
+  (with-current-buffer "*Messages*"
+    (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun get-messages-last-line ()
   (car
@@ -45,39 +44,38 @@
   (let ((str (get-mark-content (current-buffer))))
     (downcase str)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Eval: (rb-underscore "AdddTaaaGaaa") => "addd_taaa_gaaa"
-(defun rb-underscore (str)
-  (let ((cmd-str
-         (concat "drb" kungfu-path
-                 "/drb-help/rb-underscore.drb " str)))
-    (shell-command-to-string cmd-str)))
+(defun drb-shell (cmd fn &rest args) 
+  (let* ((args
+	  (if (null args) ""
+	    (concat " '" (reduce (lambda (s i) (concat s "' '" i)) args) "' ") ))
+	 (cmd-str
+	  (concat "drb" kungfu-path
+		  "/drb-help/" cmd ".drb " args)))
+    (funcall fn (shell-command-to-string cmd-str))
+    )
+  )
+
+(defmacro drb-commands (cmd)
+  `(defun ,(intern (format "rb-%s" cmd)) (str)
+     (drb-shell
+      (format "rb-%s" ,cmd)
+      (lambda (com-str) com-str)
+      str) )
+  )
+
+(drb-commands "underscore")
+(drb-commands "camelize")
+(drb-commands "parser")
+(drb-commands "source-location")
+
+(defun rb-parser-mark ()
+  (interactive)
+  (rb-parser (get-mark-content (current-buffer)))
+  )
 
 (defun rb-underscore-words ()
   (interactive)
-  (rb-underscore (get-point-keyword))
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/rb-underscore.drb "
-                         (get-point-keyword))))
-    (relace-region-str (shell-command-to-string cmd-str))))
-
-(defun rb-camelize (str)
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/rb-camelize.drb " str)))
-    (shell-command-to-string cmd-str))) 
-
-(defun ruby-parser (str)
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/ruby_parser.drb "
-                         "'" str "'")))
-    (shell-command-to-string cmd-str)))
-
-(defun ruby-parser-mark ()
-  (interactive)
-  (let ((cmd-str (concat "drb " kungfu-path
-                         "/drb-help/ruby_parser.drb "
-                         "'" (get-mark-content (current-buffer)) "'" )))
-    (message (shell-command-to-string cmd-str)) ))
+  (rb-underscore (get-point-keyword)) )
 
 ;; ;; Usage: (get-api-to-doc "http://127.0.0.1:3000/api/dasddsa")
 ;; (defun get-api-to-doc (url)
@@ -133,106 +131,84 @@ occurence of CHAR."
 ;;; Emacs查看Ruby的函数定义跳转: Mark "obj.method" => rb-source
 (defun rb-source (obj-call-method)
   (interactive)
-  (car ;;first one
+  (car
    (last
     (read
-     (shell-command-to-string
-      (concat " drb " kungfu-path
-              "/drb-help/rb_source.drb "
-              obj-call-method)) ))))
+     (rb-source-location obj-call-method)
+     )))
+  )
 
 (defvar rb-obj-root nil)
 (defvar rb-method-root nil)
+(defun rb-file-infos ()
+  (setq 
+   obj-method (get-mark-content (current-buffer))
+   file-and-line (rb-source obj-method)
+   rb-file (first file-and-line)
+   rb-line (first (last file-and-line))
+   rb-buffer (first (last (split-string rb-file "/")))
+   rb-obj (first (split-string obj-method "\\."))
+   )
+  )
 ;; Mark "instace.method" => "C-c g"
 (defun rb-source-find ()
   (interactive)
-  (let ((obj-method (get-mark-content (current-buffer))))
-    (let ((file-and-line
-           (second
-            (read (shell-command-to-string
-                   (concat " drb " kungfu-path
-                           "/drb-help/rb_source.drb " obj-method)))
-            )))
-      (let ((rb-file (first file-and-line))
-            (rb-line (first (last file-and-line))))
-        (let ((rb-buffer (first (last (split-string rb-file "/"))))
-              (rb-obj (first (split-string obj-method "\\."))))
-          (progn
-            (find-file rb-file)
-            (goto-line rb-line rb-buffer)
-            (setq rb-obj-root rb-obj)
-            (message
-             (concat "cool, open the file: " rb-file
-                     " , " (number-to-string rb-line) " , " rb-obj))
-            )
-          )))))
+  (progn
+    (rb-file-infos)
+    (find-file rb-file)
+    (goto-line rb-line rb-buffer)
+    (setq rb-obj-root rb-obj)
+    (message
+     (concat "cool, open the file: " rb-file
+	     " , " (number-to-string rb-line) " , " rb-obj))
+    )
+  )
 
 ;; Mark "instace_method" => "C-c n"
 (defun rb-source-find-next ()
   (interactive) ;;;; only diff in obj-method
-  (let ((obj-method
-         (concat rb-obj-root "." (get-mark-content (current-buffer)))))
-    (let ((file-and-line
-           (second
-            (read
-             (shell-command-to-string
-              (concat " drb " kungfu-path
-                      "/drb-help/rb_source.drb " obj-method)))
-            )))
-      (if (first file-and-line) 
-
-          (let ((rb-file (first file-and-line))
-                (rb-line (first (last file-and-line))))
-            (let ((rb-buffer (first (last (split-string rb-file "/"))))
-                  (rb-obj (first (split-string obj-method "\\."))))
-              (progn
-                (find-file rb-file)
-                (goto-line rb-line rb-buffer)
-                (setq rb-obj-root rb-obj)
-                (message
-                 (concat "cool, open the file: " rb-file
-                         " , " (number-to-string rb-line) " , " rb-obj))
-                )))
-
-        (progn
-          (setq rb-method-root (first (last file-and-line)))
-          (message
-           (concat "please go to rb-method-root : " rb-method-root
-                   " , Run : C-c b"))
-          )))))
+  (let* ((obj-method
+	  (concat rb-obj-root "." (get-mark-content (current-buffer))))
+	 (file-and-line (rb-source obj-method)))
+    (if (first file-and-line)
+	(let* ((rb-file (first file-and-line))
+	       (rb-line (first (last file-and-line)))
+	       (rb-buffer (first (last (split-string rb-file "/"))))
+	       (rb-obj (first (split-string obj-method "\\."))))
+	  (progn
+	    (find-file rb-file)
+	    (goto-line rb-line rb-buffer)
+	    (setq rb-obj-root rb-obj)
+	    (message
+	     (concat "cool, open the file: " rb-file
+		     " , " (number-to-string rb-line) " , " rb-obj)) ))
+      (progn
+	(setq rb-method-root (first (last file-and-line)))
+	(message
+	 (concat "please go to rb-method-root : " rb-method-root
+		 " , Run : C-c b")) ))))
 
 ;;; No need Mark any, use (buffer-file-name) as Class name, rb-method-root as method name => ` C-c b `
 (defun rb-source-find-next-super ()
   (interactive) ;;;; only diff in obj-method
-  (let ((obj-method
-         (concat
-          (rb-camelize
-           (first (split-string
-                   (first (last (split-string (buffer-file-name) "lib/")))
-                   "\\."))) "." rb-method-root)))
-    ;;(message obj-method) ;; Pry::Command.run
-    (let ((file-and-line
-           (second
-            (read
-             (shell-command-to-string
-              (concat " drb " kungfu-path
-                      "/drb-help/rb_source.drb " obj-method)))
-            )))
-
-      (let ((rb-file (first file-and-line))
-            (rb-line (first (last file-and-line))))
-        (let ((rb-buffer (first (last (split-string rb-file "/"))))
-              (rb-obj (first (split-string obj-method "\\."))))
-          ;;         (message (concat rb-file "===" "245" "===" rb-buffer "=======" rb-obj) )
-          ;; /usr/local/rvm/gems/ruby-2.2.3/gems/pry-0.10.1/lib/pry/command.rb===245===command.rb=======Pry::Command
-
-          (progn
-            (find-file rb-file)
-            (goto-line rb-line rb-buffer)
-            (message
-             (concat "cool, open the file: " rb-file
-                     " , " (number-to-string rb-line) " , " rb-obj)))
-          )))))
+  (let* ((obj-method
+	  (concat
+	   (rb-camelize
+	    (first (split-string
+		    (first (last (split-string (buffer-file-name) "lib/")))
+		    "\\."))) "." rb-method-root))
+	 (file-and-line
+	  (rb-source obj-method))
+	 (rb-file (first file-and-line))
+	 (rb-line (first (last file-and-line)))
+	 (rb-buffer (first (last (split-string rb-file "/"))))
+	 (rb-obj (first (split-string obj-method "\\."))))
+    (progn
+      (find-file rb-file)
+      (goto-line rb-line rb-buffer)
+      (message
+       (concat "cool, open the file: " rb-file
+	       " , " (number-to-string rb-line) " , " rb-obj))) ))
 
 ;; Like `C-x C-e` eval the ruby expression, such as: `User.first.id` => 3
 (defun rb-eval (str)
